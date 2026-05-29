@@ -3,12 +3,11 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="description"
-    content="신규 클래스 및 레벨 5 연결운영 검토 대시보드. 기수별 연결 일정, 공백 기간 유지 프로그램, 과거 데이터 비교분석 및 의사결정을 한눈에 모니터링할 수 있습니다.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="레벨 5-1기 종료 후 신규 클래스(2027.01.04)까지의 대기 기간 연결 운영 검토 및 추천 프로그램 보고용 대시보드.">
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
-  <title>신규 클래스 & 레벨 5 연결운영 검토 대시보드</title>
+  <title>새로운 클래스 대기 기간 추천 프로그램 검토</title>
   <style>
-    /* 컬러 토큰 — 3색 통일 및 피드백 컬러 적용 (네이비/블루/그린/앰버/레드) */
     :root {
       --c-navy: #1f2746;
       --c-navy-2: #2d3561;
@@ -31,14 +30,10 @@
       --shadow-lg: 0 12px 32px rgba(31, 39, 70, 0.12);
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      font-family: -apple-system, 'Outfit', 'Pretendard', 'Noto Sans KR', sans-serif;
+      font-family: -apple-system, 'Pretendard', 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
       background: var(--c-bg);
       color: var(--c-text);
       line-height: 1.5;
@@ -46,17 +41,10 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    .container {
-      max-width: 1280px;
-      margin: 0 auto;
-    }
+    .container { max-width: 1180px; margin: 0 auto; }
+    b { color: var(--c-navy-2); font-weight: 700; }
 
-    b {
-      color: var(--c-navy-2);
-      font-weight: 700;
-    }
-
-    /* 헤더 — 그라데이션 및 로고 영역 */
+    /* 헤더 */
     .header {
       background: linear-gradient(135deg, var(--c-navy) 0%, var(--c-navy-2) 60%, #3d4878 100%);
       color: #fff;
@@ -70,7 +58,6 @@
       position: relative;
       overflow: hidden;
     }
-
     .header::before {
       content: '';
       position: absolute;
@@ -78,85 +65,29 @@
       top: -50px;
       width: 200px;
       height: 200px;
-      background: radial-gradient(circle, rgba(77, 140, 255, 0.15) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(77, 140, 255, 0.18) 0%, transparent 70%);
     }
-
-    .header h1 {
-      font-size: 24px;
-      font-weight: 800;
-      margin-bottom: 6px;
-      letter-spacing: -0.3px;
-    }
-
-    .header .subtitle {
-      font-size: 13px;
-      opacity: 0.8;
-      font-weight: 400;
-    }
-
-    .header .timestamp {
-      font-size: 12px;
-      opacity: 0.7;
-      text-align: right;
-      position: relative;
-    }
-
-    .header .timestamp .big {
-      font-size: 18px;
-      font-weight: 700;
-      opacity: 1;
-      color: #fff;
-      letter-spacing: 0.3px;
-    }
+    .header h1 { font-size: 23px; font-weight: 800; margin-bottom: 6px; letter-spacing: -0.3px; }
+    .header .subtitle { font-size: 13px; opacity: 0.78; font-weight: 400; }
+    .header .timestamp { font-size: 12px; opacity: 0.7; text-align: right; position: relative; }
+    .header .timestamp .big { font-size: 18px; font-weight: 700; opacity: 1; color: #fff; letter-spacing: 0.3px; }
 
     /* 섹션 라벨 */
     .section-label {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--c-mute-2);
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
+      font-size: 11px; font-weight: 700; color: var(--c-mute-2);
+      text-transform: uppercase; letter-spacing: 1.2px;
       margin: 6px 0 12px 4px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      display: flex; align-items: center; gap: 8px;
     }
+    .section-label::before { content: ''; width: 3px; height: 14px; background: var(--c-blue); border-radius: 2px; }
 
-    .section-label::before {
-      content: '';
-      width: 3px;
-      height: 14px;
-      background: var(--c-blue);
-      border-radius: 2px;
-    }
+    /* 그리드 */
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 26px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 26px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 26px; }
+    .grid-1 { margin-bottom: 26px; }
 
-    /* 그리드 정의 */
-    .grid-4 {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    .grid-3 {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    .grid-1 {
-      margin-bottom: 24px;
-    }
-
-    /* 기본 카드 디자인 */
+    /* 카드 */
     .card {
       background: var(--c-card);
       padding: 22px 24px;
@@ -165,788 +96,186 @@
       border: 1px solid var(--c-border);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-
-    .card:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-md);
-    }
-
+    .card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
     .card-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--c-mute);
-      margin-bottom: 14px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--c-border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      letter-spacing: -0.2px;
+      font-size: 13px; font-weight: 700; color: var(--c-mute);
+      margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--c-border);
+      display: flex; justify-content: space-between; align-items: center; letter-spacing: -0.2px;
     }
-
     .card-title .badge {
-      font-size: 10px;
-      background: var(--c-blue);
-      color: #fff;
-      padding: 3px 9px;
-      border-radius: 11px;
-      font-weight: 600;
-      letter-spacing: 0.2px;
+      font-size: 10px; background: var(--c-blue); color: #fff;
+      padding: 3px 9px; border-radius: 11px; font-weight: 600; letter-spacing: 0.2px;
     }
 
-    /* ═════ 대표님 요약 4카드 ═════ */
-    .summary-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin-bottom: 28px;
-    }
-
+    /* 요약 KPI 카드 */
     .summary-card {
       background: linear-gradient(180deg, #ffffff 0%, #fbfcff 100%);
-      padding: 22px 22px 20px;
+      padding: 20px 20px 18px;
       border-radius: 16px;
       border: 1px solid var(--c-border);
       box-shadow: var(--shadow-md);
-      min-height: 270px;
-      display: flex;
-      flex-direction: column;
+      min-height: 200px;
+      display: flex; flex-direction: column;
       position: relative;
       transition: transform 0.25s ease, box-shadow 0.25s ease;
     }
-
     .summary-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 3px; border-radius: 16px 16px 0 0;
       background: linear-gradient(90deg, var(--c-blue) 0%, var(--c-navy-2) 100%);
-      border-radius: 16px 16px 0 0;
     }
-
-    .summary-card:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-lg);
-    }
-
+    .summary-card.is-danger::before { background: linear-gradient(90deg, var(--c-red) 0%, #b83b3c 100%); }
+    .summary-card.is-warn::before { background: linear-gradient(90deg, var(--c-amber) 0%, #d97a1f 100%); }
+    .summary-card.is-ok::before { background: linear-gradient(90deg, var(--c-green) 0%, #1c9c55 100%); }
+    .summary-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
     .summary-title {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--c-mute);
-      margin-bottom: 14px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--c-border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      letter-spacing: -0.2px;
+      font-size: 12px; font-weight: 700; color: var(--c-mute);
+      margin-bottom: 12px; padding-bottom: 9px; border-bottom: 1px solid var(--c-border);
+      display: flex; justify-content: space-between; align-items: center;
     }
-
-    .summary-title .ceo-badge {
-      font-size: 9px;
-      background: var(--c-navy);
-      color: #fff;
-      padding: 3px 9px;
-      border-radius: 10px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
+    .summary-title .tag {
+      font-size: 9px; padding: 3px 8px; border-radius: 10px; font-weight: 700; letter-spacing: 0.4px; color: #fff;
     }
-
-    .analogy {
-      font-size: 11px;
-      color: var(--c-blue);
-      text-align: center;
-      margin: 6px 0 10px;
-      padding: 5px 10px;
-      background: var(--c-blue-soft);
-      border-radius: 6px;
-      font-weight: 600;
+    .tag.danger { background: var(--c-red); }
+    .tag.warn { background: var(--c-amber); }
+    .tag.ok { background: var(--c-green); }
+    .tag.info { background: var(--c-navy); }
+    .big-number { font-size: 36px; font-weight: 800; color: var(--c-navy-2); line-height: 1.1; letter-spacing: -1px; }
+    .big-number .unit { font-size: 16px; color: var(--c-mute); font-weight: 600; margin-left: 2px; }
+    .big-number.danger { color: var(--c-red); }
+    .big-number.warn { color: var(--c-amber); }
+    .summary-sub { font-size: 12px; color: var(--c-mute); margin-top: 8px; line-height: 1.55; flex: 1; }
+    .summary-foot {
+      font-size: 11px; color: var(--c-blue); font-weight: 600;
+      margin-top: 10px; padding: 6px 10px; background: var(--c-blue-soft); border-radius: 6px; text-align: center;
     }
+    .summary-list { font-size: 12px; color: var(--c-text); margin-top: 6px; line-height: 1.7; flex: 1; }
+    .summary-list .li { display: flex; align-items: baseline; gap: 7px; }
+    .summary-list .dot { width: 7px; height: 7px; border-radius: 50%; flex: 0 0 auto; margin-top: 5px; }
 
-    /* ⑴ 공백 비교 카드 전용 */
-    .gap-compared-wrap {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 8px;
+    /* 타임라인 */
+    .timeline-strip {
+      display: flex; align-items: stretch; gap: 0;
+      padding: 14px 4px 6px; overflow-x: auto;
     }
-
-    .gap-bar-container {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
+    .tl-node { flex: 1 1 0; min-width: 116px; position: relative; text-align: center; padding: 0 6px; }
+    .tl-node::before {
+      content: ''; position: absolute; top: 26px; left: 50%; right: -50%;
+      height: 3px; background: var(--c-border);
     }
-
-    .gap-bar-label {
-      font-size: 11px;
-      font-weight: 700;
-      display: flex;
-      justify-content: space-between;
-      color: var(--c-navy-2);
+    .tl-node:last-child::before { display: none; }
+    .tl-dot {
+      width: 16px; height: 16px; border-radius: 50%; margin: 20px auto 0;
+      background: var(--c-blue); border: 3px solid #fff; box-shadow: 0 0 0 2px var(--c-blue);
+      position: relative; z-index: 2;
     }
+    .tl-dot.end { background: var(--c-red); box-shadow: 0 0 0 2px var(--c-red); }
+    .tl-dot.rest { background: var(--c-mute-2); box-shadow: 0 0 0 2px var(--c-mute-2); }
+    .tl-dot.launch { background: var(--c-green); box-shadow: 0 0 0 2px var(--c-green); width: 20px; height: 20px; }
+    .tl-date { font-size: 12px; font-weight: 800; color: var(--c-navy-2); margin-top: 12px; }
+    .tl-label { font-size: 11px; color: var(--c-text); margin-top: 4px; font-weight: 600; line-height: 1.35; }
+    .tl-dday { font-size: 10px; color: #fff; background: var(--c-navy-2); border-radius: 9px; padding: 2px 8px; margin-top: 6px; display: inline-block; font-weight: 700; }
+    .tl-dday.soon { background: var(--c-red); }
+    .tl-note { font-size: 10px; color: var(--c-mute); margin-top: 5px; }
 
-    .gap-bar-bg {
-      height: 16px;
-      background: #eef1f6;
-      border-radius: 4px;
-      overflow: hidden;
-      position: relative;
-      margin-bottom: 4px;
-    }
-
-    .gap-bar-fill {
-      height: 100%;
-      transition: width 0.3s ease;
-      border-radius: 4px;
-    }
-
-    .gap-bar-fill.safe {
-      background: var(--c-green);
-    }
-
-    .gap-bar-fill.warning {
-      background: var(--c-amber);
-    }
-
-    .gap-bar-fill.danger {
-      background: var(--c-red);
-    }
-
-    /* ⑵ 과거 전환율 게이지 전용 */
-    .gauges-row {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      flex: 1;
-      padding-top: 5px;
-    }
-
-    .gauge-container {
-      text-align: center;
-      position: relative;
-    }
-
-    .gauge-svg {
-      width: 80px;
-      height: 80px;
-    }
-
-    .gauge-label {
-      font-size: 10px;
-      color: var(--c-mute);
-      font-weight: 700;
-      margin-top: 4px;
-    }
-
-    .gauge-val-sub {
-      font-size: 9px;
-      color: var(--c-mute-2);
-    }
-
-    /* ⑶ 시뮬레이터 카드 전용 */
-    .sim-control-btn {
-      padding: 4px 10px;
-      font-size: 11px;
-      font-weight: 700;
-      border-radius: 6px;
-      border: 1px solid var(--c-border);
-      background: #fff;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .sim-control-btn.active {
-      background: var(--c-blue);
-      color: #fff;
-      border-color: var(--c-blue);
-    }
-
-    .sim-result-box {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      text-align: center;
-      background: var(--c-blue-soft);
-      border-radius: 8px;
-      padding: 10px;
-      margin-top: 10px;
-    }
-
-    .sim-result-status {
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--c-navy-2);
-    }
-
-    .sim-result-desc {
-      font-size: 11px;
-      color: var(--c-mute);
-      margin-top: 4px;
-    }
-
-    /* ⑷ 추천 프로그램 카드 전용 */
-    .rec-prog-wrap {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .rec-tag-group {
-      display: flex;
-      gap: 4px;
-      flex-wrap: wrap;
-      margin-bottom: 6px;
-    }
-
-    .rec-tag {
-      font-size: 9px;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-weight: 700;
-    }
-
-    .rec-tag.blue {
-      background: var(--c-blue-soft);
-      color: var(--c-blue);
-    }
-
-    .rec-tag.green {
-      background: var(--c-green-soft);
-      color: var(--c-green);
-    }
-
-    .rec-tag.amber {
-      background: var(--c-amber-soft);
-      color: var(--c-amber);
-    }
-
-    .rec-desc {
-      font-size: 11px;
-      color: var(--c-mute);
-      line-height: 1.4;
-    }
-
-    .rec-price {
-      font-size: 13px;
-      font-weight: 800;
-      color: var(--c-navy-2);
-      margin-top: 8px;
-      padding-top: 8px;
-      border-top: 1px dashed var(--c-border);
-      text-align: right;
-    }
-
-    /* ═════ Gantt Chart 스타일 ═════ */
-    .gantt-card {
-      position: relative;
-    }
-
-    .gantt-svg {
-      width: 100%;
-      height: auto;
-      display: block;
-      background: #fff;
-      border-radius: 8px;
-    }
-
-    .gantt-tooltip {
-      position: absolute;
-      pointer-events: none;
-      background: rgba(31, 39, 70, 0.96);
-      color: #fff;
-      padding: 10px 14px;
-      border-radius: 8px;
-      font-size: 11px;
-      line-height: 1.6;
-      box-shadow: var(--shadow-lg);
-      opacity: 0;
-      transition: opacity 0.15s;
-      z-index: 100;
-      max-width: 280px;
-      white-space: normal;
-    }
-
-    .gantt-tooltip.visible {
-      opacity: 1;
-    }
-
-    .gantt-tooltip .t-title {
-      font-weight: 800;
-      color: #4d8cff;
-      font-size: 12px;
-      margin-bottom: 4px;
-    }
-
-    .gantt-tooltip .t-meta {
-      display: flex;
-      justify-content: space-between;
-      gap: 14px;
-      margin-bottom: 2px;
-    }
-
-    .gantt-tooltip .t-meta b {
-      color: #fff;
-    }
-
-    .gantt-tooltip .t-desc {
-      margin-top: 6px;
-      padding-top: 6px;
-      border-top: 1px dashed rgba(255, 255, 255, 0.2);
-      color: #ffce85;
-    }
-
-    /* ═════ 테이블 스타일 ═════ */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12px;
-    }
-
+    /* 일정 표 */
+    table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
     table th {
-      background: #f8f9fc;
-      padding: 10px 12px;
-      text-align: left;
-      font-weight: 700;
-      color: var(--c-mute);
-      border-bottom: 2px solid #e0e0e8;
+      background: #f8f9fc; padding: 9px 10px; text-align: left; font-weight: 700;
+      color: var(--c-mute); border-bottom: 2px solid #e0e0e8; white-space: nowrap;
     }
+    table td { padding: 9px 10px; border-bottom: 1px solid #f0f0f5; vertical-align: top; }
+    table tr:last-child td { border-bottom: none; }
+    .pill { display: inline-block; font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 9px; }
+    .pill.blue { background: var(--c-blue-soft); color: #2b6fd6; }
+    .pill.gray { background: #eef0f5; color: var(--c-mute); }
+    .pill.green { background: var(--c-green-soft); color: #1c9c55; }
 
-    table td {
-      padding: 10px 12px;
-      border-bottom: 1px solid #f0f0f5;
-      vertical-align: middle;
+    /* 시나리오 비교 */
+    .scenario {
+      border: 1px solid var(--c-border); border-radius: 12px; overflow: hidden;
+      background: #fff; display: flex; flex-direction: column; height: 100%;
     }
+    .scenario-head { padding: 13px 16px; color: #fff; display: flex; align-items: center; gap: 8px; }
+    .scenario-head.danger { background: linear-gradient(135deg, var(--c-red), #c23c3d); }
+    .scenario-head.warn { background: linear-gradient(135deg, var(--c-amber), #d97a1f); }
+    .scenario-head.info { background: linear-gradient(135deg, var(--c-navy-2), #3d4878); }
+    .scenario-head .sc-n { background: rgba(255,255,255,0.22); font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 6px; }
+    .scenario-head .sc-t { font-size: 13px; font-weight: 800; }
+    .scenario-body { padding: 16px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
+    .sc-gap { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+    .sc-gap.danger { color: var(--c-red); }
+    .sc-gap.warn { color: var(--c-amber); }
+    .sc-gap.info { color: var(--c-navy-2); }
+    .sc-gap small { font-size: 12px; color: var(--c-mute); font-weight: 600; margin-left: 4px; }
+    .sc-desc { font-size: 12px; color: #4a4a5e; line-height: 1.55; }
+    .sc-tagline { font-size: 11px; color: var(--c-mute); margin-top: auto; padding-top: 10px; border-top: 1px dashed var(--c-border); }
 
-    table tr:last-child td {
-      border-bottom: none;
+    .judgement-box {
+      margin-top: 4px; background: var(--c-amber-soft); border: 1px solid #ffe2c2;
+      border-radius: 12px; padding: 16px 18px;
     }
+    .judgement-box .jb-title { font-size: 12px; font-weight: 800; color: #c4710f; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+    .judgement-box .jb-text { font-size: 12.5px; color: #5a4a30; line-height: 1.6; }
+    .judgement-box .jb-text b { color: #a85d0a; }
 
-    table tbody tr:hover {
-      background: #fbfcc433;
+    /* 추천 옵션 카드 */
+    .option-card { border: 1px solid var(--c-border); border-radius: 14px; background: #fff; overflow: hidden; display: flex; flex-direction: column; box-shadow: var(--shadow-sm); }
+    .option-head { padding: 15px 18px; color: #fff; display: flex; align-items: center; gap: 10px; }
+    .option-head.opt1 { background: linear-gradient(135deg, var(--c-navy-2), #3d4878); }
+    .option-head.opt2 { background: linear-gradient(135deg, var(--c-green), #1c9c55); }
+    .option-head .opt-no { font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 5px; background: rgba(255,255,255,0.2); letter-spacing: 0.5px; }
+    .option-head .opt-name { font-size: 15px; font-weight: 800; }
+    .option-body { padding: 18px; flex: 1; display: flex; flex-direction: column; gap: 14px; }
+
+    .compose-row { display: grid; grid-template-columns: 70px 1fr; gap: 12px; align-items: start; }
+    .compose-term {
+      font-size: 11px; font-weight: 800; color: var(--c-navy-2); text-align: center;
+      background: var(--c-blue-soft); border-radius: 8px; padding: 8px 4px; line-height: 1.3;
     }
+    .compose-row.total .compose-term { background: var(--c-amber-soft); color: #c4710f; }
+    .compose-desc { font-size: 12px; color: #4a4a5e; line-height: 1.5; }
+    .compose-desc .note { color: var(--c-mute); font-size: 11px; }
 
-    .highlight-row {
-      background: #fdf8f0;
+    .sub-block { border-top: 1px solid #f0f0f5; padding-top: 12px; }
+    .sub-block .sb-title { font-size: 11px; font-weight: 800; color: var(--c-navy-2); margin-bottom: 7px; display: flex; align-items: center; gap: 6px; }
+    .quote {
+      font-size: 12px; color: #3d4878; line-height: 1.55; background: #f8f9fc;
+      border-left: 3px solid var(--c-blue); border-radius: 0 8px 8px 0; padding: 10px 12px;
     }
+    .op-judge { font-size: 11.5px; color: #4a4a5e; line-height: 1.65; }
+    .op-judge .li { display: flex; gap: 7px; align-items: baseline; }
+    .op-judge .li::before { content: '•'; color: var(--c-blue); font-weight: 800; }
+    .op-judge .li.warn::before { color: var(--c-amber); }
 
-    /* ═════ 파이프라인(Funnel) 인포그래픽 ═════ */
-    .funnel-container {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      padding: 10px 0;
+    .price-ref { display: flex; gap: 10px; }
+    .price-ref .pr-item { flex: 1; background: #f8f9fc; border: 1px solid var(--c-border); border-radius: 8px; padding: 10px 12px; text-align: center; }
+    .price-ref .pr-label { font-size: 10.5px; color: var(--c-mute); font-weight: 600; }
+    .price-ref .pr-val { font-size: 17px; font-weight: 800; color: var(--c-navy-2); margin-top: 3px; letter-spacing: -0.5px; }
+    .price-ref .pr-val small { font-size: 11px; color: var(--c-mute); font-weight: 600; }
+
+    /* 추가 확인 표 */
+    .check-table td .pill { margin-right: 4px; }
+
+    /* 결론 카드 */
+    .conclusion-card {
+      background: linear-gradient(135deg, var(--c-navy) 0%, var(--c-navy-2) 100%);
+      color: #fff; border-radius: 16px; padding: 24px 26px; box-shadow: var(--shadow-lg);
     }
+    .conclusion-card h3 { font-size: 15px; font-weight: 800; border-bottom: 1px solid rgba(255,255,255,0.16); padding-bottom: 10px; margin-bottom: 14px; }
+    .conclusion-card ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .conclusion-card li { font-size: 12.5px; line-height: 1.55; padding-left: 18px; position: relative; opacity: 0.92; }
+    .conclusion-card li::before { content: '▸'; position: absolute; left: 0; color: var(--c-amber); font-weight: 800; }
+    .conclusion-summary { margin-top: 18px; background: rgba(255,255,255,0.08); border-radius: 10px; padding: 14px 16px; }
+    .conclusion-summary .cs-label { font-size: 10.5px; font-weight: 800; color: var(--c-amber); text-transform: uppercase; letter-spacing: 0.6px; }
+    .conclusion-summary .cs-text { font-size: 13px; font-weight: 700; line-height: 1.55; margin-top: 5px; }
 
-    .funnel-step {
-      display: flex;
-      align-items: center;
-      position: relative;
-      background: #f8f9fc;
-      border-radius: 8px;
-      border-left: 4px solid var(--c-blue);
-      padding: 12px 16px;
-      transition: transform 0.2s;
-    }
+    .footer { text-align: center; padding: 20px; color: #9a9ab0; font-size: 11px; line-height: 1.6; }
 
-    .funnel-step:hover {
-      transform: translateX(4px);
-    }
-
-    .funnel-step.step-1 {
-      border-color: var(--c-navy-2);
-      background: #f4f5f8;
-    }
-
-    .funnel-step.step-2 {
-      border-color: var(--c-green);
-      background: var(--c-green-soft);
-    }
-
-    .funnel-step.step-3 {
-      border-color: var(--c-amber);
-      background: var(--c-amber-soft);
-    }
-
-    .funnel-meta {
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-    }
-
-    .funnel-title {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--c-navy-2);
-    }
-
-    .funnel-desc {
-      font-size: 11px;
-      color: var(--c-mute);
-      margin-top: 2px;
-    }
-
-    .funnel-badge {
-      padding: 4px 10px;
-      font-size: 12px;
-      font-weight: 800;
-      border-radius: 20px;
-      background: #fff;
-      border: 1px solid var(--c-border);
-    }
-
-    .funnel-step.step-1 .funnel-badge {
-      color: var(--c-navy-2);
-      border-color: var(--c-navy-2);
-    }
-
-    .funnel-step.step-2 .funnel-badge {
-      color: var(--c-green);
-      border-color: var(--c-green);
-    }
-
-    .funnel-step.step-3 .funnel-badge {
-      color: var(--c-amber);
-      border-color: var(--c-amber);
-    }
-
-    /* ═════ 시나리오 시뮬레이터 카드 (대형) ═════ */
-    .scenario-btn-group {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-
-    .scenario-btn {
-      flex: 1;
-      padding: 10px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 700;
-      border: 1px solid var(--c-border);
-      background: #fff;
-      cursor: pointer;
-      transition: all 0.2s;
-      text-align: center;
-    }
-
-    .scenario-btn:hover {
-      background: #f8f9fc;
-    }
-
-    .scenario-btn.active {
-      background: var(--c-navy-2);
-      color: #fff;
-      border-color: var(--c-navy-2);
-    }
-
-    .scenario-display {
-      background: #f8f9fc;
-      border-radius: 10px;
-      padding: 16px;
-      border: 1px solid var(--c-border);
-      min-height: 130px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .scenario-title-active {
-      font-size: 13px;
-      font-weight: 800;
-      color: var(--c-navy-2);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .scenario-desc-active {
-      font-size: 12px;
-      color: #4a4a5e;
-      margin-top: 8px;
-      line-height: 1.5;
-    }
-
-    .scenario-badge-flow {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 10px;
-      font-weight: 700;
-      margin-top: 8px;
-      align-self: flex-start;
-    }
-
-    .scenario-badge-flow.a {
-      background: var(--c-green-soft);
-      color: var(--c-green);
-    }
-
-    .scenario-badge-flow.b {
-      background: var(--c-blue-soft);
-      color: var(--c-blue);
-    }
-
-    .scenario-badge-flow.c {
-      background: var(--c-amber-soft);
-      color: var(--c-amber);
-    }
-
-    /* ═════ 체크리스트 카드 ═════ */
-    .checklist-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-
-    .checklist-progress-bg {
-      height: 6px;
-      background: #eef1f6;
-      border-radius: 3px;
-      flex: 1;
-      margin: 0 12px;
-      overflow: hidden;
-    }
-
-    .checklist-progress-fill {
-      height: 100%;
-      background: var(--c-blue);
-      width: 0%;
-      transition: width 0.3s ease;
-    }
-
-    .checklist-progress-text {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--c-mute);
-      min-width: 35px;
-      text-align: right;
-    }
-
-    .checklist-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      max-height: 290px;
-      overflow-y: auto;
-      padding-right: 4px;
-    }
-
-    .checklist-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      font-size: 11.5px;
-      color: #4a4a5e;
-      padding: 8px 10px;
-      background: #f8f9fc;
-      border-radius: 6px;
-      border: 1px solid transparent;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .checklist-item:hover {
-      background: #f1f3f9;
-      border-color: var(--c-border);
-    }
-
-    .checklist-item.checked {
-      background: #fff;
-      border-color: var(--c-border);
-      opacity: 0.65;
-    }
-
-    .checklist-item input[type="checkbox"] {
-      margin-top: 3px;
-      cursor: pointer;
-    }
-
-    .checklist-text {
-      line-height: 1.4;
-    }
-
-    .checklist-item.checked .checklist-text {
-      text-decoration: line-through;
-      color: var(--c-mute);
-    }
-
-    /* ═════ 대표님 결론 강조 박스 ═════ */
-    .ceo-report-card {
-      background: linear-gradient(135deg, #2d3561 0%, #1f2746 100%);
-      color: #fff;
-      padding: 24px;
-      border-radius: 14px;
-      box-shadow: var(--shadow-lg);
-      border: none;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .ceo-report-card h3 {
-      font-size: 15px;
-      font-weight: 800;
-      padding-bottom: 12px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-      margin-bottom: 12px;
-      color: #fff;
-    }
-
-    .ceo-report-card ul {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      font-size: 11.5px;
-      opacity: 0.9;
-    }
-
-    .ceo-report-card li {
-      display: flex;
-      align-items: flex-start;
-      gap: 6px;
-      line-height: 1.4;
-    }
-
-    .ceo-report-card li::before {
-      content: '•';
-      color: var(--c-amber);
-      font-weight: bold;
-    }
-
-    .ceo-conclusion-box {
-      margin-top: 16px;
-      padding: 12px 14px;
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 8px;
-      border-left: 3px solid var(--c-amber);
-    }
-
-    .ceo-conclusion-title {
-      font-size: 11px;
-      font-weight: 800;
-      color: var(--c-amber);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .ceo-conclusion-text {
-      font-size: 12px;
-      font-weight: 700;
-      margin-top: 4px;
-      line-height: 1.4;
-      color: #fff;
-    }
-
-    /* ═════ 시뮬레이터 조작 요소 ═════ */
-    .sim-control-btn {
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 700;
-      border: 1px solid var(--c-border);
-      background: #fff;
-      cursor: pointer;
-      transition: all 0.2s;
-      text-align: center;
-    }
-
-    .sim-control-btn:hover {
-      background: #f8f9fc;
-    }
-
-    .sim-control-btn.active {
-      background: var(--c-navy-2);
-      color: #fff;
-      border-color: var(--c-navy-2);
-    }
-
-    .sim-input {
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .sim-input:focus {
-      border-color: var(--c-blue);
-    }
-
-    /* Option cards specific styling to handle responsiveness */
-    @media (max-width: 768px) {
-      #simSectionGrid {
-        grid-template-columns: 1fr !important;
-      }
-
-      .option-grid {
-        grid-template-columns: 1fr !important;
-      }
-    }
-
-    /* ═════ 모바일 반응형 ═════ */
-    @media (max-width: 1024px) {
-
-      .summary-grid,
-      .grid-4 {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .grid-3 {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .grid-2 {
-        grid-template-columns: 1fr;
-      }
-
-      .header {
-        padding: 24px 26px;
-      }
-
-      .header h1 {
-        font-size: 20px;
-      }
-    }
-
-    @media (max-width: 640px) {
-      body {
-        padding: 16px 12px;
-      }
-
-      .summary-grid,
-      .grid-4,
-      .grid-3,
-      .grid-2 {
-        grid-template-columns: 1fr;
-        gap: 12px;
-        margin-bottom: 18px;
-      }
-
-      .header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-        padding: 20px 22px;
-      }
-
-      .header .timestamp {
-        text-align: left;
-      }
-
-      .card,
-      .summary-card {
-        padding: 18px 18px;
-      }
-
-      .summary-card {
-        min-height: auto;
-      }
+    @media (max-width: 920px) {
+      .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+      .header { flex-direction: column; align-items: flex-start; gap: 14px; }
+      .header .timestamp { text-align: left; }
     }
   </style>
 </head>
@@ -957,1149 +286,384 @@
     <!-- 헤더 -->
     <div class="header">
       <div>
-        <h1>신규 클래스 & 레벨 5 연결운영 검토 대시보드</h1>
-        <div class="subtitle">기수별 연결 일정 · 공백 기간 유지 프로그램 · 과거 데이터 기반 보고서</div>
+        <h1>새로운 클래스 대기 기간 추천 프로그램 검토</h1>
+        <div class="subtitle">레벨 5-1기 종료 후 신규 클래스(2027.01.04)까지 · 대기 기간 연결 운영안</div>
       </div>
       <div class="timestamp">
-        <div class="big">2026-05-27 11:15</div>
-        <div>마지막 검토 업데이트</div>
+        <div class="big">2026-05-29</div>
+        <div>내부 보고용 · 검토 기준일</div>
       </div>
     </div>
 
     <!-- 섹션 1: 핵심 요약 -->
     <div class="section-label">핵심 요약</div>
-    <div class="summary-grid">
-      <!-- ⑴ 시작안 공백 비교 -->
-      <div class="summary-card">
-        <div class="summary-title">⑴ 신규 클래스 공백 기간</div>
-        <div class="gap-compared-wrap">
-          <div class="gap-bar-container">
-            <div class="gap-bar-label"><span>11월 2일 시작안 (1개월 공백)</span><b style="color:var(--c-green)">안전</b></div>
-            <div class="gap-bar-bg">
-              <div class="gap-bar-fill safe" style="width: 14%"></div>
-            </div>
-          </div>
-          <div class="gap-bar-container">
-            <div class="gap-bar-label"><span>1월 4일 시작안 (3개월 공백)</span><b style="color:var(--c-amber)">경계</b></div>
-            <div class="gap-bar-bg">
-              <div class="gap-bar-fill warning" style="width: 42%"></div>
-            </div>
-          </div>
-          <div class="gap-bar-container">
-            <div class="gap-bar-label"><span>5-1기 대기 회원 (7개월 공백)</span><b style="color:var(--c-red)">위험</b></div>
-            <div class="gap-bar-bg">
-              <div class="gap-bar-fill danger" style="width: 100%"></div>
-            </div>
-          </div>
-        </div>
-        <div class="analogy">종료 후 3개월 이상 공백 시 유지 프로그램 필수</div>
+    <div class="grid-4">
+
+      <!-- ⑴ 미진행 시 공백 -->
+      <div class="summary-card is-danger">
+        <div class="summary-title">⑴ 미진행 시 대기 공백 <span class="tag danger">위험</span></div>
+        <div class="big-number danger">약 7<span class="unit">개월</span></div>
+        <div class="summary-sub">레벨 5-1기 <b>2026.06.05 종료</b> 후 아무 과정도 진행하지 않으면 신규 클래스(2027.01.04)까지 공백이 발생합니다.</div>
+        <div class="summary-foot">운동 습관 단절 → 이탈 위험 최대</div>
       </div>
 
-      <!-- ⑵ 레벨 5-1기 연결 예측 -->
-      <div class="summary-card">
-        <div class="summary-title">⑵ 레벨 5-1기 연결 예측</div>
-        <div class="gauges-row">
-          <div class="gauge-container">
-            <svg viewBox="0 0 36 36" class="gauge-svg">
-              <path stroke="#f0f0f5" stroke-width="3" fill="none"
-                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-              <path stroke="var(--c-navy-2)" stroke-width="3" stroke-dasharray="70, 100" fill="none"
-                stroke-linecap="round"
-                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-              <text x="18" y="21.5" text-anchor="middle" font-size="7.5" font-weight="800"
-                fill="var(--c-navy-2)">70%</text>
-            </svg>
-            <div class="gauge-label">예상 재등록률</div>
-            <div class="gauge-val-sub">(27 / 38명)</div>
-          </div>
-          <div class="gauge-container">
-            <svg viewBox="0 0 36 36" class="gauge-svg">
-              <path stroke="#f0f0f5" stroke-width="3" fill="none"
-                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-              <path stroke="var(--c-amber)" stroke-width="3" stroke-dasharray="50, 100" fill="none"
-                stroke-linecap="round"
-                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-              <text x="18" y="21.5" text-anchor="middle" font-size="7.5" font-weight="800"
-                fill="var(--c-amber)">50%</text>
-            </svg>
-            <div class="gauge-label">예상 재수강률</div>
-            <div class="gauge-val-sub">(13 / 27명)</div>
-          </div>
-        </div>
-        <div class="analogy" style="margin-top: 12px;">총원 38명 중 27명 재등록, 그 중 13명이 재수강으로 대기 가정</div>
+      <!-- ⑵ 연결 프로그램 적용 시 -->
+      <div class="summary-card is-warn">
+        <div class="summary-title">⑵ 연결 적용 후 잔여 공백 <span class="tag warn">경계</span></div>
+        <div class="big-number warn">약 3<span class="unit">개월</span></div>
+        <div class="summary-sub">복습반+레벨 5-2기 재수강으로 <b>06.08~10.02(약 4개월)</b> 운동을 연결해도 10.02 이후 잔여 공백이 남습니다.</div>
+        <div class="summary-foot">4개월 구성 이후 유지 방식 추가 검토 필요</div>
       </div>
 
-      <!-- ⑶ 레벨 5-3기 단독 개설 가능성 -->
+      <!-- ⑶ 추천 옵션 -->
       <div class="summary-card">
-        <div class="summary-title">⑶ 레벨 5-3기 단독 개설</div>
-        <div style="display: flex; gap: 4px; justify-content: space-between; margin-bottom: 6px;">
-          <button class="sim-control-btn active" onclick="setCeoSim(80)">80% 등록</button>
-          <button class="sim-control-btn" onclick="setCeoSim(70)">70% 등록</button>
-          <button class="sim-control-btn" onclick="setCeoSim(60)">60% 등록</button>
+        <div class="summary-title">⑶ 추천 프로그램 <span class="tag info">2개 안</span></div>
+        <div class="summary-list">
+          <div class="li"><span class="dot" style="background:var(--c-navy-2)"></span><span><b>옵션 1.</b> 복습반 + 레벨 5 라이브 재수강형</span></div>
+          <div class="li"><span class="dot" style="background:var(--c-green)"></span><span><b>옵션 2.</b> 레벨 5 영상 자율 수행형</span></div>
         </div>
-        <div class="sim-result-box" id="ceoSimBox">
-          <div class="sim-result-status" id="ceoSimStatus" style="color:var(--c-green)">🟢 단독 운영 가능</div>
-          <div class="sim-result-desc" id="ceoSimDesc">예상 인원 약 28명으로 안정적 단독 개설 가능 (시나리오 A)</div>
-        </div>
-        <div class="analogy" style="margin-top: 8px;">레벨 4-4기 총원 35명 기준 시뮬레이션</div>
+        <div class="summary-foot">라이브 참여 가능 여부·비용 부담에 따라 선택</div>
       </div>
 
+      <!-- ⑷ 가격 근거 -->
+      <div class="summary-card">
+        <div class="summary-title">⑷ 가격 설정 근거 <span class="tag info">참고</span></div>
+        <div class="summary-sub" style="flex:0; margin-top:2px;">기존 레벨 5 재등록 금액 사례</div>
+        <div class="price-ref" style="margin-top:10px; flex:1; align-items:center;">
+          <div class="pr-item">
+            <div class="pr-label">레벨 4-1기</div>
+            <div class="pr-val">800,000<small>원</small></div>
+          </div>
+          <div class="pr-item">
+            <div class="pr-label">레벨 4-2기</div>
+            <div class="pr-val">870,000<small>원</small></div>
+          </div>
+        </div>
+        <div class="summary-foot">현실적 가격 설정 기준으로 활용 가능</div>
+      </div>
     </div>
 
-    <!-- 섹션 2: 전체 기수 연결 일정 (Gantt Chart) -->
-    <div class="section-label">전체 기수 연결 일정 타임라인</div>
+    <!-- 섹션 2: 신규 클래스 및 연결 일정 -->
+    <div class="section-label">신규 클래스 및 연결 일정</div>
     <div class="grid-1">
-      <div class="card gantt-card">
-        <div class="card-title">📅 기수별 일정 로드맵 (2026.06 ~ 2027.02) <span class="badge">마우스 오버 시 상세내역 확인</span></div>
-
-        <!-- Gantt Chart SVG -->
-        <svg viewBox="0 0 1000 360" class="gantt-svg" id="ganttChart">
-          <!-- Grid Month Backgrounds and Lines -->
-          <!-- Month Columns: X Range [120, 980] for 270 days. 1 month ≈ 95.5px -->
-          <!-- 6월 (120~215) -->
-          <rect x="120" y="20" width="95" height="310" fill="#fcfcfd" opacity="0.5" />
-          <text x="167" y="38" text-anchor="middle" font-size="11" font-weight="700" fill="#8e95b0">6월</text>
-          <line x1="215" y1="20" x2="215" y2="330" stroke="#ebedf5" stroke-dasharray="3,3" />
-
-          <!-- 7월 (215~314) -->
-          <rect x="215" y="20" width="99" height="310" fill="#f8f9fb" opacity="0.5" />
-          <text x="264" y="38" text-anchor="middle" font-size="11" font-weight="700" fill="#8e95b0">7월</text>
-          <line x1="314" y1="20" x2="314" y2="330" stroke="#ebedf5" stroke-dasharray="3,3" />
-
-          <!-- 8월 (314~413) -->
-          <rect x="314" y="20" width="99" height="310" fill="#fcfcfd" opacity="0.5" />
-          <text x="363" y="38" text-anchor="middle" font-size="11" font-weight="700" fill="#8e95b0">8월</text>
-          <line x1="413" y1="20" x2="413" y2="330" stroke="#ebedf5" stroke-dasharray="3,3" />
-
-          <!-- 9월 (413~508) -->
-          <rect x="413" y="20" width="95" height="310" fill="#f8f9fb" opacity="0.5" />
-          <text x="460" y="38" text-anchor="middle" font-size="11" font-weight="700" fill="#8e95b0">9월</text>
-          <line x1="508" y1="20" x2="508" y2="330" stroke="#ebedf5" stroke-dasharray="3,3" />
-
-          <!-- 10월 (508~607) -->
-          <rect x="508" y="20" width="99" height="310" fill="#fcfcfd" opacity="0.5" />
-          <text x="557" y="38" text-anchor="middle" font-size="11" font-weight="700" fill="#8e95b0">10월</text>
-          <line x1="607" y1="20" x2="607" y2="330" stroke="#ebedf5" stroke-dasharray="3,3" />
-
-          <!-- 11월 (607~702) -->
-          <rect x="607" y="20" width="95" height="310" fill="#f8f9fb" opacity="0.5" />
-          <text x="654" y="38" text-anchor="middle" font-size="11" font-weight="700" fill="#8e95b0">11월</text>
-          <line x1="702" y1="20" x2="702" y2="330" stroke="#ebedf5" stroke-dasharray="3,3" />
-
-          <!-- 12월 (702~801) -->
-          <rect x="702" y="20" width="99" height="310" fill="#fcfcfd" opacity="0.5" />
-          <text x="751" y="38" text-anchor="middle" font-size="11" font-weight="700" fill="#8e95b0">12월</text>
-          <line x1="801" y1="20" x2="801" y2="330" stroke="#ebedf5" stroke-dasharray="3,3" />
-
-          <!-- 1월 (801~900) -->
-          <rect x="801" y="20" width="99" height="310" fill="#f8f9fb" opacity="0.5" />
-          <text x="850" y="38" text-anchor="middle" font-size="11" font-weight="700" fill="#8e95b0">1월</text>
-          <line x1="900" y1="20" x2="900" y2="330" stroke="#ebedf5" stroke-dasharray="3,3" />
-
-          <!-- 2월 (900~980) -->
-          <rect x="900" y="20" width="80" height="310" fill="#fcfcfd" opacity="0.5" />
-          <text x="940" y="38" text-anchor="middle" font-size="11" font-weight="700" fill="#8e95b0">2월</text>
-
-          <!-- Row Labels -->
-          <text x="10" y="72" font-size="11.5" font-weight="800" fill="var(--c-navy-2)">레벨 5-1기</text>
-          <text x="10" y="117" font-size="11.5" font-weight="800" fill="var(--c-navy-2)">레벨 4-3기 → 5-2기</text>
-          <text x="10" y="167" font-size="11.5" font-weight="800" fill="var(--c-navy-2)">레벨 3-6기 → 4-4기 → 5-3기</text>
-          <text x="10" y="217" font-size="11.5" font-weight="800" fill="var(--c-navy-2)">레벨 2-9기 → 3-7기 → 4-5기</text>
-          <text x="10" y="277" font-size="11.5" font-weight="800" fill="#cc7000">신규 클래스 시작안 ①</text>
-          <text x="10" y="317" font-size="11.5" font-weight="800" fill="#dc3545">신규 클래스 시작안 ②</text>
-
-          <!-- Horizontal grid line dividers -->
-          <line x1="120" y1="90" x2="980" y2="90" stroke="#ebedf5" stroke-width="1" />
-          <line x1="120" y1="140" x2="980" y2="140" stroke="#ebedf5" stroke-width="1" />
-          <line x1="120" y1="190" x2="980" y2="190" stroke="#ebedf5" stroke-width="1" />
-          <line x1="120" y1="245" x2="980" y2="245" stroke="#ebedf5" stroke-width="1.5" />
-          <line x1="120" y1="295" x2="980" y2="295" stroke="#ebedf5" stroke-width="1" />
-
-          <!-- Gantt Bars -->
-          <!-- 1. 레벨 5-1기 (과거 종료 6/5) -->
-          <!-- Ends at 6.05 (X:133) -->
-          <rect class="gantt-bar" x="80" y="58" width="53" height="20" rx="4" fill="#a0a4b8" opacity="0.6"
-            style="cursor:pointer;" data-title="레벨 5-1기" data-date="2026-03-16 ~ 2026-06-05" data-members="현재 38명"
-            data-desc="현재 인원 38명. 재등록 70%(27명) 가정, 재수강인원 전환자의 50%(13명) 설정하여 대기 기간 연결 시뮬레이션 적용." />
-
-          <!-- 2. 레벨 4-3기 → 5-2기 -->
-          <!-- 4-3기: ~ 07.03 (X:222) -->
-          <rect class="gantt-bar" x="80" y="103" width="142" height="20" rx="4" fill="#a0a4b8" opacity="0.5"
-            style="cursor:pointer;" data-title="레벨 4-3기" data-date="~ 2026-07-03" data-members="-"
-            data-desc="종료 후 1주 휴식 후 레벨 5-2기로 연결됩니다." />
-          <!-- 5-2기: 07.13 ~ 10.02 (X:254 to 512) -->
-          <rect class="gantt-bar" x="254" y="103" width="258" height="20" rx="4" fill="var(--c-blue)"
-            style="cursor:pointer;" data-title="레벨 5-2기" data-date="2026-07-13 ~ 2026-10-02" data-members="12주 과정"
-            data-desc="종료 후 신규 클래스 시작 시점에 따라 1개월(11월 시작) 또는 3개월(1월 시작) 공백이 생깁니다." />
-
-          <!-- 3. 레벨 3-6기 → 4-4기 → 5-3기 -->
-          <!-- 3-6기: ~ 07.31 (X:311) -->
-          <rect class="gantt-bar" x="180" y="153" width="131" height="20" rx="4" fill="#a0a4b8" opacity="0.5"
-            style="cursor:pointer;" data-title="레벨 3-6기" data-date="~ 2026-07-31" data-members="현재 23명"
-            data-desc="종료 후 바로(휴식 없이) 레벨 4-4기로 연결됩니다." />
-          <!-- 4-4기: 08.03 ~ 10.23 (X:321 to 579) -->
-          <rect class="gantt-bar" x="321" y="153" width="258" height="20" rx="4" fill="var(--c-blue)"
-            style="cursor:pointer;" data-title="레벨 4-4기" data-date="2026-08-03 ~ 2026-10-23" data-members="예상 총원 약 35명"
-            data-desc="레벨 3-6기 재등록 예상(16명) + 레벨 3-5기 대기(19명)로 구성됩니다. 종료 후 레벨 5-3기 시작 전 2주 휴식." />
-          <!-- 5-3기: 11.09 ~ 01.29 (X:633 to 891) -->
-          <rect class="gantt-bar" id="gantt53Bar" x="633" y="153" width="258" height="20" rx="4" fill="var(--c-amber)"
-            style="cursor:pointer; transition: opacity 0.3s;" data-title="레벨 5-3기 (예정)"
-            data-date="2026-11-09 ~ 2027-01-29" data-members="최소 운영 기준 충족 여부 확인 필요"
-            data-desc="레벨 4-4기 수료 인원의 재등록 비율에 따라 단독 개설 가능 여부가 결정됩니다. (80%: 28명 단독운영 / 60%: 21명으로 단독운영 불가하여 대기 후 합류)" />
-
-          <!-- 4. 레벨 2-9기 → 3-7기 → 4-5기 -->
-          <!-- 2-9기: ~ 07.03 (X:222) -->
-          <rect class="gantt-bar" x="80" y="203" width="142" height="20" rx="4" fill="#a0a4b8" opacity="0.5"
-            style="cursor:pointer;" data-title="레벨 2-9기" data-date="~ 2026-07-03" data-members="현재 51명"
-            data-desc="종료 후 1주 휴식 후 레벨 3-7기로 전환(60% 전환 시 약 30명 예상)" />
-          <!-- 3-7기: 07.13 ~ 10.02 (X:254 to 512) -->
-          <rect class="gantt-bar" x="254" y="203" width="258" height="20" rx="4" fill="var(--c-blue)" opacity="0.85"
-            style="cursor:pointer;" data-title="레벨 3-7기" data-date="2026-07-13 ~ 2026-10-02" data-members="12주 과정"
-            data-desc="종료 후 1주 휴식 후 레벨 4-5기로 연결 예정" />
-          <!-- 4-5기: 10.12 ~ 01.01 (X:544 to 802) -->
-          <rect class="gantt-bar" x="544" y="203" width="258" height="20" rx="4" fill="var(--c-blue)" opacity="0.85"
-            style="cursor:pointer;" data-title="레벨 4-5기" data-date="2026-10-12 ~ 2027-01-01" data-members="12주 과정"
-            data-desc="레벨 4-4기 등록 인원 부족 시, 레벨 4-5기 수료자가 레벨 5-3기로 대기 후 합류하는 시나리오 B가 검토될 수 있습니다." />
-
-          <!-- 5. 신규 클래스 시작안 ① (11.02) -->
-          <rect class="gantt-bar" x="611" y="263" width="350" height="20" rx="4" fill="#ffc894" stroke="var(--c-amber)"
-            stroke-width="1.5" style="cursor:pointer;" data-title="신규 클래스 1기 [시작안 ①]" data-date="2026-11-02 시작"
-            data-members="주요 타겟: 5-1기, 5-2기" data-desc="레벨 5-2기 수료 후 공백을 1개월로 최소화하여 이탈률을 낮추기에 가장 유리합니다." />
-
-          <!-- 6. 신규 클래스 시작안 ② (01.04) -->
-          <rect class="gantt-bar" x="811" y="303" width="150" height="20" rx="4" fill="#ffb4b4" stroke="var(--c-red)"
-            stroke-width="1.5" style="cursor:pointer;" data-title="신규 클래스 1기 [시작안 ②]" data-date="2027-01-04 시작"
-            data-members="주요 타겟: 5-1기, 5-2기"
-            data-desc="새로운 컨셉 및 상품 개발을 위한 준비 기간(3개월) 확보 가능하나, 기존 수료생의 공백 관리가 필수적입니다." />
-
-          <!-- Connection indicators -->
-          <!-- 4-3 to 5-2 connection -->
-          <path d="M 222 113 L 254 113" stroke="#8e95b0" stroke-width="1.5" stroke-dasharray="2,2"
-            marker-end="url(#arrow)" />
-          <!-- 5-2 to New Class 1 (Nov) -->
-          <path d="M 512 113 L 530 113 L 530 273 L 611 273" fill="none" stroke="#28c76f" stroke-width="1.5"
-            stroke-dasharray="3,2" />
-          <!-- 5-2 to New Class 2 (Jan) -->
-          <path d="M 512 113 L 520 113 L 520 313 L 811 313" fill="none" stroke="#ea5455" stroke-width="1.5"
-            stroke-dasharray="3,2" />
-          <!-- 4-4 to 5-3 connection -->
-          <path d="M 579 163 L 633 163" stroke="#8e95b0" stroke-width="1.5" stroke-dasharray="2,2" />
-          <!-- 4-5 to 5-3 connection (B Scenario) -->
-          <path id="ganttBLink" d="M 802 213 L 802 180 L 750 180 L 750 173" fill="none" stroke="#4d8cff"
-            stroke-width="1.5" stroke-dasharray="3,2" opacity="0.3" />
-
-          <!-- Markers for arrows -->
-          <defs>
-            <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6"
-              orient="auto-start-reverse">
-              <path d="M 0 1 L 10 5 L 0 9 z" fill="#8e95b0" />
-            </marker>
-          </defs>
-        </svg>
-        <div id="ganttTooltip" class="gantt-tooltip"></div>
-      </div>
-    </div>
-
-    <!-- 섹션 3: 일정 상세 분석 & 레벨 4-4기 시뮬레이터 -->
-    <div class="grid-2">
-      <!-- 일정 분석 표 -->
       <div class="card">
-        <div class="card-title">📊 레벨 5-2기 → 신규 클래스 연결 비교</div>
-        <table style="margin-top: 6px;">
+        <div class="card-title">📅 연결 일정 타임라인 <span class="badge">2026.06 ~ 2027.01</span></div>
+
+        <div class="timeline-strip">
+          <div class="tl-node">
+            <div class="tl-dot end"></div>
+            <div class="tl-date">06.05 <span style="font-weight:600;color:var(--c-mute);font-size:10px;">(금)</span></div>
+            <div class="tl-label">레벨 5-1기 종료</div>
+            <div class="tl-dday soon">D-7</div>
+            <div class="tl-note">신규 클래스 대기 대상</div>
+          </div>
+          <div class="tl-node">
+            <div class="tl-dot"></div>
+            <div class="tl-date">06.08 <span style="font-weight:600;color:var(--c-mute);font-size:10px;">(월)</span></div>
+            <div class="tl-label">1개월 복습반 시작</div>
+            <div class="tl-dday soon">D-10</div>
+            <div class="tl-note">종료 후 바로 연결</div>
+          </div>
+          <div class="tl-node">
+            <div class="tl-dot"></div>
+            <div class="tl-date">07.03 <span style="font-weight:600;color:var(--c-mute);font-size:10px;">(금)</span></div>
+            <div class="tl-label">1개월 복습반 종료</div>
+            <div class="tl-dday">D-35</div>
+            <div class="tl-note">4주 운영</div>
+          </div>
+          <div class="tl-node">
+            <div class="tl-dot rest"></div>
+            <div class="tl-date">07.04~07.12</div>
+            <div class="tl-label">휴식 기간</div>
+            <div class="tl-dday">1주</div>
+            <div class="tl-note">재정비</div>
+          </div>
+          <div class="tl-node">
+            <div class="tl-dot"></div>
+            <div class="tl-date">07.13 <span style="font-weight:600;color:var(--c-mute);font-size:10px;">(월)</span></div>
+            <div class="tl-label">레벨 5-2기 시작</div>
+            <div class="tl-dday">D-45</div>
+            <div class="tl-note">라이브 재수강 연결</div>
+          </div>
+          <div class="tl-node">
+            <div class="tl-dot end"></div>
+            <div class="tl-date">10.02 <span style="font-weight:600;color:var(--c-mute);font-size:10px;">(금)</span></div>
+            <div class="tl-label">레벨 5-2기 종료</div>
+            <div class="tl-dday">D-126</div>
+            <div class="tl-note">12주 과정 종료</div>
+          </div>
+          <div class="tl-node">
+            <div class="tl-dot launch"></div>
+            <div class="tl-date">'27.01.04 <span style="font-weight:600;color:var(--c-mute);font-size:10px;">(월)</span></div>
+            <div class="tl-label">새로운 클래스 시작</div>
+            <div class="tl-dday">D-220</div>
+            <div class="tl-note">신규 컨셉 런칭 예정</div>
+          </div>
+        </div>
+
+        <table style="margin-top: 18px;">
           <thead>
             <tr>
-              <th>구분 / 시작안</th>
-              <th>공백 기간</th>
-              <th>장점</th>
-              <th>리스크</th>
+              <th style="width:30%;">구분</th>
+              <th style="width:28%;">일정</th>
+              <th>비고</th>
             </tr>
           </thead>
           <tbody>
-            <tr class="highlight-row">
-              <td><b>① 2026.11.02 시작</b></td>
-              <td><span style="color:var(--c-green); font-weight:700">약 1개월</span></td>
-              <td>운동 습관 유지, 기존 기수 이탈 최소화</td>
-              <td>컨셉 및 홍보자료 준비 기간 부족</td>
+            <tr>
+              <td><b>레벨 5-1기 종료</b></td>
+              <td>2026.06.05 (금)</td>
+              <td>신규 클래스 대기 대상</td>
             </tr>
             <tr>
-              <td><b>② 2027.01.04 시작</b></td>
-              <td><span style="color:var(--c-amber); font-weight:700">약 3개월</span></td>
-              <td>신규 컨셉 준비 및 마케팅 설계 가능</td>
-              <td>회원 이탈 리스크 증가 (유지 프로그램 필수)</td>
+              <td><b>1개월 복습반 시작</b></td>
+              <td>2026.06.08 (월)</td>
+              <td>레벨 5-1기 종료 후 바로 연결</td>
             </tr>
             <tr>
-              <td><b>③ 2027.02월 이후 시작</b></td>
-              <td><span style="color:var(--c-red); font-weight:700">3개월 이상</span></td>
-              <td>레벨 5-3기까지 연계 범위 확대 가능</td>
-              <td>장기 공백으로 기존 회원 이탈 위험 가장 큼</td>
+              <td><b>1개월 복습반 종료</b></td>
+              <td>2026.07.03 (금)</td>
+              <td><span class="pill blue">4주 운영</span></td>
+            </tr>
+            <tr>
+              <td><b>휴식 기간</b></td>
+              <td>2026.07.04 ~ 07.12</td>
+              <td><span class="pill gray">1주 휴식</span></td>
+            </tr>
+            <tr>
+              <td><b>레벨 5-2기 시작</b></td>
+              <td>2026.07.13 (월)</td>
+              <td>라이브 재수강 연결 가능</td>
+            </tr>
+            <tr>
+              <td><b>레벨 5-2기 종료</b></td>
+              <td>2026.10.02 (금)</td>
+              <td><span class="pill blue">12주 과정 종료</span></td>
+            </tr>
+            <tr>
+              <td><b>새로운 클래스 시작</b></td>
+              <td>2027.01.04 (월)</td>
+              <td><span class="pill green">신규 컨셉 클래스 런칭 예정</span></td>
             </tr>
           </tbody>
         </table>
       </div>
+    </div>
 
-      <!-- 레벨 4-4기 -> 5-3기 시뮬레이터 -->
-      <div class="card">
-        <div class="card-title">🔄 레벨 4-4기 → 5-3기 연결 시나리오</div>
-        <div class="scenario-btn-group">
-          <button class="scenario-btn active" onclick="setScenario('A')">A안 (인원 충분)</button>
-          <button class="scenario-btn" onclick="setScenario('B')">B안 (인원 부족)</button>
-          <button class="scenario-btn" onclick="setScenario('C')">C안 (일부 대기)</button>
+    <!-- 섹션 3: 대기 기간 시나리오 비교 -->
+    <div class="section-label">대기 기간 확인 — 시나리오별 공백</div>
+    <div class="grid-3">
+
+      <div class="scenario">
+        <div class="scenario-head danger">
+          <span class="sc-n">CASE A</span>
+          <span class="sc-t">아무 과정 미진행</span>
         </div>
-        <div class="scenario-display">
-          <div class="scenario-title-active" id="scenTitle">A안: 등록 인원 충분시 단독 개설</div>
-          <div class="scenario-desc-active" id="scenDesc">
-            • <b>조건</b>: 레벨 4-4기에서 등록률 75~80% 이상 확보 (약 25~28명)<br>
-            • <b>일정</b>: 2026년 11월 9일 레벨 5-3기 즉시 시작 (2주 휴식)<br>
-            • <b>판단</b>: 공백 없이 빠른 연결이 가능하여 가장 권장되는 루트입니다.
-          </div>
-          <div class="scenario-badge-flow a" id="scenBadge">A안: 11월 9일 단독 개설</div>
+        <div class="scenario-body">
+          <div class="sc-gap danger">약 7개월 <small>공백</small></div>
+          <div class="sc-desc">2026.06.05 종료 후 바로 대기 상태로 들어가, 신규 클래스 시작까지 운동 연결이 없습니다.</div>
+          <div class="sc-tagline">레벨 5-1기 회원이 아무것도 진행하지 않는 경우</div>
+        </div>
+      </div>
+
+      <div class="scenario">
+        <div class="scenario-head warn">
+          <span class="sc-n">CASE B</span>
+          <span class="sc-t">복습반 + 5-2기 재수강</span>
+        </div>
+        <div class="scenario-body">
+          <div class="sc-gap warn">약 3개월 <small>잔여 공백</small></div>
+          <div class="sc-desc">2026.06.08 ~ 10.02까지 운동을 연결하지만, 10.02 이후 신규 클래스까지 공백이 남습니다.</div>
+          <div class="sc-tagline">복습반 + 레벨 5-2기 재수강을 진행하는 경우</div>
+        </div>
+      </div>
+
+      <div class="scenario">
+        <div class="scenario-head info">
+          <span class="sc-n">CASE C</span>
+          <span class="sc-t">영상 수강권 선택</span>
+        </div>
+        <div class="scenario-body">
+          <div class="sc-gap info">운영 기간 <small>확정 필요</small></div>
+          <div class="sc-desc">영상 수강권 시작일·종료일을 어떻게 배치하느냐에 따라 잔여 공백이 달라져, 별도 확인이 필요합니다.</div>
+          <div class="sc-tagline">영상 수강권을 선택하는 경우</div>
         </div>
       </div>
     </div>
 
-    <div class="section-label">과거 연결 데이터 상세 분석</div>
     <div class="grid-1">
-      <div class="card">
-        <div class="card-title">🔍 과거 레벨 4-1기 · 4-2기 → 레벨 5-1기 연결 데이터 <span class="badge">실제 사례 분석</span></div>
-
-        <!-- 데스크톱용 2열 배치 -->
-        <div style="display: grid; grid-template-columns: 1fr 1.8fr; gap: 24px; margin-top: 10px;" id="pastDataGrid">
-          <!-- Left: Funnel & Insights -->
-          <div>
-            <!-- Funnel -->
-            <div class="funnel-container">
-              <div class="funnel-step step-1">
-                <div class="funnel-meta">
-                  <span class="funnel-title">레벨 4-1기 종료일 (2025.10.17)</span>
-                  <span class="funnel-desc">총원 36명 수료</span>
-                </div>
-                <span class="funnel-badge">36명</span>
-              </div>
-              <div class="funnel-step step-2">
-                <div class="funnel-meta">
-                  <span class="funnel-title">레벨 5-1기 최종 전환율 (56%)</span>
-                  <span class="funnel-desc">전체 수료자 중 20명 전환 완료 (이탈 16명)</span>
-                </div>
-                <span class="funnel-badge">20명</span>
-              </div>
-              <div class="funnel-step step-3">
-                <div class="funnel-meta">
-                  <span class="funnel-title">공백 기간 레벨 4 재수강 전환 (55%)</span>
-                  <span class="funnel-desc">전환자 20명 중 11명이 재수강을 선택해 5개월 대기 연결</span>
-                </div>
-                <span class="funnel-badge">11명</span>
-              </div>
-            </div>
-
-            <!-- Insights Box -->
-            <div
-              style="margin-top: 16px; padding: 14px 16px; background: var(--c-blue-soft); border-radius: 8px; border-left: 3px solid var(--c-blue);">
-              <div style="font-size: 12px; font-weight: 800; color: var(--c-navy-2); margin-bottom: 6px;">과거 데이터에서 확인되는
-                핵심 시사점</div>
-              <ul
-                style="list-style: none; font-size: 11px; color: #4a4a5e; display: flex; flex-direction: column; gap: 6px;">
-                <li>• <b>5개월 공백 발생</b>: 레벨 4-1기 종료 후 다음 단계 시작까지 약 5개월의 긴 공백이 있었습니다.</li>
-                <li>• <b>높은 이탈 비율</b>: 총원 36명 중 20명만 전환되고 16명(44%)이 이탈하였습니다.</li>
-                <li>• <b>재수강을 통한 대기 기간 연결</b>: 전환 인원 20명 중 11명(55%)이 동일 레벨(레벨 4) 재수강을 통해 대기 기간을 극복하였습니다. (전체 총원 대비 약 31%
-                  수준)</li>
-                <li>• <b>연결 프로그램 유효성</b>: 이탈 원인이 대기 기간 때문이라고 단정할 수는 없으나, 긴 공백 발생 시 기존 회원을 유지할 프로그램이 실제로 필요했다는 근거로 활용
-                  가능합니다.</li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- Right: Detailed Tables -->
-          <div style="display: flex; flex-direction: column; gap: 18px;">
-            <!-- Subgrid for table 1 & 2 -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;" class="past-table-grid">
-              <!-- Table 1: 전환 현황 -->
-              <div style="border: 1px solid var(--c-border); border-radius: 8px; overflow: hidden;">
-                <div
-                  style="background: #f8f9fc; padding: 8px 10px; font-size: 11.5px; font-weight: 700; color: var(--c-navy-2); border-bottom: 1px solid var(--c-border);">
-                  📊 레벨 4-1기 종료 후 전환 현황
-                </div>
-                <table style="font-size: 11px; width: 100%;">
-                  <thead>
-                    <tr>
-                      <th>구분</th>
-                      <th>인원 / 일정</th>
-                      <th>비고</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><b>레벨 4-1기 종료일</b></td>
-                      <td>2025.10.17 금</td>
-                      <td>-</td>
-                    </tr>
-                    <tr>
-                      <td><b>레벨 4-1기 총원</b></td>
-                      <td>36명</td>
-                      <td>-</td>
-                    </tr>
-                    <tr>
-                      <td><b>이후 전환 인원</b></td>
-                      <td>20명</td>
-                      <td style="color:var(--c-green); font-weight:700">총원의 약 56%</td>
-                    </tr>
-                    <tr>
-                      <td><b>이탈 인원</b></td>
-                      <td>16명</td>
-                      <td style="color:var(--c-red)">총원의 약 44%</td>
-                    </tr>
-                    <tr>
-                      <td><b>레벨 4 재수강 인원</b></td>
-                      <td>11명</td>
-                      <td style="color:var(--c-blue); font-weight:700">전환자의 55%</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-              <!-- Table 2: 재수강 인원 구성 -->
-              <div style="border: 1px solid var(--c-border); border-radius: 8px; overflow: hidden;">
-                <div
-                  style="background: #f8f9fc; padding: 8px 10px; font-size: 11.5px; font-weight: 700; color: var(--c-navy-2); border-bottom: 1px solid var(--c-border);">
-                  🧩 레벨 4 재수강 인원 구성
-                </div>
-                <table style="font-size: 11px; width: 100%;">
-                  <thead>
-                    <tr>
-                      <th>재수강 형태</th>
-                      <th>인원</th>
-                      <th>비고</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><b>레벨 4-2기 전 과정 합류</b></td>
-                      <td>9명</td>
-                      <td>시작부터 함께 수강</td>
-                    </tr>
-                    <tr>
-                      <td><b>레벨 4-2기 2개월 차 합류</b></td>
-                      <td>1명</td>
-                      <td>대기 기간 소폭 단축</td>
-                    </tr>
-                    <tr>
-                      <td><b>레벨 4-2기 3개월 차 합류</b></td>
-                      <td>1명</td>
-                      <td>대기 기간 대폭 단축</td>
-                    </tr>
-                    <tr style="background:#fcfcfd; border-top: 1.5px solid var(--c-border);">
-                      <td><b>총 재수강 인원</b></td>
-                      <td><b>11명</b></td>
-                      <td style="color:var(--c-blue); font-weight:700">전환자의 55%</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <!-- Subgrid for table 3 & 4 -->
-            <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 14px;" class="past-table-grid">
-              <!-- Table 3: 레벨 4-2기 → 레벨 5-1기 일정 -->
-              <div style="border: 1px solid var(--c-border); border-radius: 8px; overflow: hidden;">
-                <div
-                  style="background: #f8f9fc; padding: 8px 10px; font-size: 11.5px; font-weight: 700; color: var(--c-navy-2); border-bottom: 1px solid var(--c-border);">
-                  📅 레벨 4-2기 → 레벨 5-1기 일정
-                </div>
-                <table style="font-size: 11px; width: 100%;">
-                  <thead>
-                    <tr>
-                      <th>구분</th>
-                      <th>일정</th>
-                      <th>비고</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><b>레벨 4-2기 시작</b></td>
-                      <td>2025.12.08 월요일</td>
-                      <td>-</td>
-                    </tr>
-                    <tr>
-                      <td><b>레벨 4-2기 종료</b></td>
-                      <td>2026.03.06 금요일</td>
-                      <td>12주 과정 완료</td>
-                    </tr>
-                    <tr>
-                      <td><b>레벨 5-1기 시작</b></td>
-                      <td>2026.03.16 월요일</td>
-                      <td style="color:var(--c-green); font-weight:700">1주 휴식 후 시작</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-              <!-- Table 4: 시작까지의 대기 기간 -->
-              <div style="border: 1px solid var(--c-border); border-radius: 8px; overflow: hidden;">
-                <div
-                  style="background: #f8f9fc; padding: 8px 10px; font-size: 11.5px; font-weight: 700; color: var(--c-navy-2); border-bottom: 1px solid var(--c-border);">
-                  ⏳ 레벨 5-1기 시작까지의 대기 기간
-                </div>
-                <table style="font-size: 11px; width: 100%;">
-                  <thead>
-                    <tr>
-                      <th>대상</th>
-                      <th>대기 기간</th>
-                      <th>연결 방식</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><b>레벨 4-1기 종료 회원</b></td>
-                      <td style="color:var(--c-red); font-weight:700">약 5개월</td>
-                      <td>일부 레벨 4 재수강 대기</td>
-                    </tr>
-                    <tr>
-                      <td><b>레벨 4-2기 종료 회원</b></td>
-                      <td style="color:var(--c-green); font-weight:700">약 1주</td>
-                      <td>레벨 5-1기 즉시 합류</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
+      <div class="judgement-box">
+        <div class="jb-title">⚠️ 현재 판단</div>
+        <div class="jb-text">
+          옵션 1을 선택하더라도 레벨 5-2기가 종료되는 <b>10월 2일</b>부터 새로운 클래스 시작일인 <b>2027년 1월 4일</b>까지
+          약 <b>3개월의 추가 공백</b>이 남습니다. 따라서 옵션 1은 <b>4개월 구성 이후</b>, 신규 클래스 시작 전까지
+          어떤 방식으로 회원을 유지할지 <b>추가 검토가 필요</b>합니다.
         </div>
       </div>
     </div>
 
-    <!-- 섹션 5: 대기 기간 추천 프로그램 및 금액 시뮬레이터 -->
-    <div class="section-label">대기 기간 추천 프로그램 및 금액 시뮬레이터</div>
-    <div class="grid-1">
-      <div class="card">
-        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; margin-top: 10px;" id="simSectionGrid">
-
-          <!-- Left: Option 1 & Option 2 Detail Cards -->
-          <div style="display: flex; flex-direction: column; gap: 20px;">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;" class="option-grid">
-
-              <!-- Option 1 Card -->
-              <div class="option-card"
-                style="border: 1px solid var(--c-border); border-radius: 10px; background: #fff; overflow: hidden; display: flex; flex-direction: column;">
-                <div
-                  style="background: var(--c-navy-2); color: #fff; padding: 12px 14px; display: flex; align-items: center; gap: 8px;">
-                  <span
-                    style="background: var(--c-red); color: #fff; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px;">OPT
-                    01</span>
-                  <span style="font-size: 12px; font-weight: 800;">라이브 재수강 패키지</span>
-                </div>
-                <div
-                  style="padding: 16px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
-                  <div style="font-size: 11px; color: #4a4a5e; line-height: 1.5; margin-bottom: 12px;">
-                    레벨5를 한 번 더 라이브로 함께 진행하며 동작 완성도와 체력을 제대로 끌어올리고 싶은 분들께 추천드립니다.
-                  </div>
-                  <div
-                    style="background: #f8f9fc; padding: 12px; border-radius: 8px; margin-bottom: 12px; border: 1px solid var(--c-border);">
-                    <div
-                      style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 6px; color:#4a4a5e;">
-                      <span>1개월 복습반</span><b id="lblOpt1Rev">320,000원</b>
-                    </div>
-                    <div
-                      style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 6px; color:#4a4a5e;">
-                      <span>3개월 라이브</span><b id="lblOpt1Live">870,000원</b>
-                    </div>
-                    <div
-                      style="display: flex; justify-content: space-between; font-size: 11px; color: var(--c-mute); border-top: 1px dashed var(--c-border); padding-top: 6px; margin-top: 6px;">
-                      <span>패키지 할인</span><span style="color:var(--c-red); font-weight:700"
-                        id="lblOpt1Disc">-100,000원</span>
-                    </div>
-                    <div
-                      style="display: flex; justify-content: space-between; font-size: 12.5px; font-weight: 800; color: var(--c-navy-2); margin-top: 6px; border-top: 1px solid var(--c-border); padding-top: 6px;">
-                      <span>최종 등록 금액</span><span style="color:var(--c-red)" id="lblOpt1Final">1,090,000원</span>
-                    </div>
-                  </div>
-                  <div
-                    style="font-size: 10.5px; color: var(--c-mute); border-top: 1px solid #f0f0f5; padding-top: 10px;">
-                    <div style="font-weight: 800; margin-bottom: 4px; color: var(--c-navy-2);">👍 추천 대상</div>
-                    <div style="margin-bottom: 2px;">• 레벨5를 다시 제대로 완성하고 싶은 분</div>
-                    <div style="margin-bottom: 2px;">• 혼자보다 라이브로 운동해야 꾸준히 이어가는 분</div>
-                    <div>• 레벨6 전까지 퍼포먼스를 더 끌어올리고 싶은 분</div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Option 2 Card -->
-              <div class="option-card"
-                style="border: 1px solid var(--c-border); border-radius: 10px; background: #fff; overflow: hidden; display: flex; flex-direction: column;">
-                <div
-                  style="background: #28c76f; color: #fff; padding: 12px 14px; display: flex; align-items: center; gap: 8px;">
-                  <span
-                    style="background: var(--c-navy-2); color: #fff; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px;">OPT
-                    02</span>
-                  <span style="font-size: 12px; font-weight: 800;">영상·루틴 제공반 패키지</span>
-                </div>
-                <div
-                  style="padding: 16px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
-                  <div style="font-size: 11px; color: #4a4a5e; line-height: 1.5; margin-bottom: 12px;">
-                    라이브 재수강은 부담스럽지만, 혼자서 루틴과 운동 영상을 받아 자율적으로 운동 감각을 유지하고 싶은 분들께 추천합니다.
-                  </div>
-                  <div
-                    style="background: #f8f9fc; padding: 12px; border-radius: 8px; margin-bottom: 12px; border: 1px solid var(--c-border);">
-                    <div
-                      style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 6px; color:#4a4a5e;">
-                      <span>1개월 복습반</span><b id="lblOpt2Rev">320,000원</b>
-                    </div>
-                    <div
-                      style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 6px; color:#4a4a5e;">
-                      <span>3개월 영상제공</span><b id="lblOpt2Vid">480,000원</b>
-                    </div>
-                    <div
-                      style="display: flex; justify-content: space-between; font-size: 11px; color: var(--c-mute); border-top: 1px dashed var(--c-border); padding-top: 6px; margin-top: 6px;">
-                      <span>패키지 할인</span><span style="color:var(--c-green); font-weight:700"
-                        id="lblOpt2Disc">-80,000원</span>
-                    </div>
-                    <div
-                      style="display: flex; justify-content: space-between; font-size: 12.5px; font-weight: 800; color: var(--c-navy-2); margin-top: 6px; border-top: 1px solid var(--c-border); padding-top: 6px;">
-                      <span>최종 등록 금액</span><span style="color:var(--c-green)" id="lblOpt2Final">720,000원</span>
-                    </div>
-                  </div>
-                  <div
-                    style="font-size: 10.5px; color: var(--c-mute); border-top: 1px solid #f0f0f5; padding-top: 10px;">
-                    <div style="font-weight: 800; margin-bottom: 4px; color: var(--c-navy-2);">👍 추천 대상</div>
-                    <div style="margin-bottom: 2px;">• 레벨5 라이브 재수강은 비용/일정상 부담스러운 분</div>
-                    <div style="margin-bottom: 2px;">• 개인 일정상 라이브 실시간 참여가 어려운 분</div>
-                    <div>• 영상과 루틴을 보며 운동 감각 유지를 원하는 분</div>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
-            <!-- Comparison Summary Table -->
-            <div style="border: 1px solid var(--c-border); border-radius: 8px; overflow: hidden; background: #fff;">
-              <div
-                style="background: #f8f9fc; padding: 8px 12px; font-size: 11.5px; font-weight: 700; color: var(--c-navy-2); border-bottom: 1px solid var(--c-border); display: flex; align-items: center; gap: 6px;">
-                <span>⚖️ 옵션 선택 기준 요약 비교</span>
-              </div>
-              <table style="font-size: 10.5px; margin: 0; width: 100%;">
-                <thead>
-                  <tr>
-                    <th style="width: 20%;">구분</th>
-                    <th style="width: 40%;">옵션 1 (라이브 패키지)</th>
-                    <th style="width: 40%;">옵션 2 (영상·루틴 패키지)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td><b>기본 방향</b></td>
-                    <td>레벨 5 완성 과정 (체력 및 퍼포먼스)</td>
-                    <td>레벨 5 감각 유지 과정 (루틴 관리)</td>
-                  </tr>
-                  <tr>
-                    <td><b>레벨 5 진행</b></td>
-                    <td>실시간 라이브 참여 및 양방향 피드백</td>
-                    <td>녹화 영상 및 데일리 루틴 제공 (라이브 없음)</td>
-                  </tr>
-                  <tr>
-                    <td><b>추천 성향</b></td>
-                    <td>함께 해야 운동이 잘 되는 회원</td>
-                    <td>자율 운동이 가능한 회원</td>
-                  </tr>
-                  <tr style="background: #fdfdfd;">
-                    <td><b>목표</b></td>
-                    <td>체력·동작·퍼포먼스 극대화</td>
-                    <td>장기 공백 방지 및 핵심 감각 유지</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- Right: Interactive Simulator Panel -->
-          <div
-            style="background: #f8f9fc; border: 1px solid var(--c-border); border-radius: 12px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between;">
-            <div>
-              <div
-                style="font-size: 13px; font-weight: 800; color: var(--c-navy-2); display: flex; align-items: center; gap: 6px; margin-bottom: 14px;">
-                <span>💰 현실적 금액 재설정 & 매출 시뮬레이터</span>
-              </div>
-
-              <!-- Quick Options Preset Buttons -->
-              <div style="display: flex; gap: 8px; margin-bottom: 16px;">
-                <button class="sim-control-btn active" style="flex:1; font-size:11px;" id="btnPresetOriginal"
-                  onclick="applyPreset('original')">원래 기획안 (이미지안)</button>
-                <button class="sim-control-btn"
-                  style="flex:1; font-size:11px; color:#28c76f; border-color:#28c76f; background:#e8faf0;"
-                  id="btnPresetRealistic" onclick="applyPreset('realistic')">★ 현실적 조정 권장안</button>
-              </div>
-
-              <!-- Price Input Fields -->
-              <div style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 10px; margin-bottom: 14px;">
-                <div style="font-size: 11px; display: flex; align-items: center; color:#4a4a5e;"><b>1개월 복습반 단가 (원)</b>
-                </div>
-                <input type="number" id="inpRevPrice" class="sim-input" value="320000" oninput="calcPrices()"
-                  placeholder="예: 240000"
-                  style="padding: 6px 10px; border: 1px solid var(--c-border); border-radius: 6px; font-size: 12px; font-weight: 700; width: 100%;">
-
-                <div style="font-size: 11px; display: flex; align-items: center; color:#4a4a5e;"><b>3개월 라이브 단가 (원)</b>
-                </div>
-                <input type="number" id="inpLivePrice" class="sim-input" value="870000" oninput="calcPrices()"
-                  placeholder="예: 750000"
-                  style="padding: 6px 10px; border: 1px solid var(--c-border); border-radius: 6px; font-size: 12px; font-weight: 700; width: 100%;">
-
-                <div style="font-size: 11px; display: flex; align-items: center; color:#4a4a5e;"><b>3개월 영상 루틴 단가 (원)</b>
-                </div>
-                <input type="number" id="inpVidPrice" class="sim-input" value="480000" oninput="calcPrices()"
-                  placeholder="예: 390000"
-                  style="padding: 6px 10px; border: 1px solid var(--c-border); border-radius: 6px; font-size: 12px; font-weight: 700; width: 100%;">
-
-                <div style="font-size: 11px; display: flex; align-items: center; color:#4a4a5e;"><b>옵션 1 패키지 할인 (원)</b>
-                </div>
-                <input type="number" id="inpOpt1Disc" class="sim-input" value="100000" oninput="calcPrices()"
-                  placeholder="예: 100000"
-                  style="padding: 6px 10px; border: 1px solid var(--c-border); border-radius: 6px; font-size: 12px; font-weight: 700; width: 100%;">
-
-                <div style="font-size: 11px; display: flex; align-items: center; color:#4a4a5e;"><b>옵션 2 패키지 할인 (원)</b>
-                </div>
-                <input type="number" id="inpOpt2Disc" class="sim-input" value="80000" oninput="calcPrices()"
-                  placeholder="예: 50000"
-                  style="padding: 6px 10px; border: 1px solid var(--c-border); border-radius: 6px; font-size: 12px; font-weight: 700; width: 100%;">
-              </div>
-
-              <!-- Revenue Split Slider -->
-              <div style="border-top: 1px dashed var(--c-border); padding-top: 12px; margin-top: 12px;">
-                <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 6px;">
-                  <span style="color:#4a4a5e;"><b>예상 전환 회원수 (명)</b></span>
-                  <input type="number" id="inpConvCount" value="20" oninput="calcPrices()"
-                    style="width: 60px; text-align: center; border: 1px solid var(--c-border); border-radius: 6px; font-size: 12px; font-weight:700; padding: 3px;">
-                </div>
-                <div style="display: flex; justify-content: space-between; font-size: 11.5px; margin-bottom: 6px;">
-                  <span style="color:#4a4a5e;"><b>옵션 1 선택 비율 (%)</b></span>
-                  <span style="font-weight: 800; color: var(--c-navy-2);" id="lblOpt1Share">40% (옵션 2: 60%)</span>
-                </div>
-                <input type="range" id="inpOpt1Share" min="0" max="100" value="40" oninput="calcPrices()"
-                  style="width: 100%; cursor: pointer;">
-              </div>
-            </div>
-
-            <!-- Simulation Output Box -->
-            <div
-              style="background: var(--c-navy-2); color: #fff; padding: 14px; border-radius: 8px; margin-top: 14px; box-shadow: var(--shadow-sm);">
-              <div style="font-size: 10.5px; color: #a4b3d6; font-weight: 700; text-transform: uppercase;">매출 예측 시뮬레이션
-                결과</div>
-              <div
-                style="display: flex; justify-content: space-between; font-size: 11px; margin-top: 8px; opacity: 0.9;">
-                <span>옵션 1 (라이브) 등록: <span id="lblResOpt1Count" style="font-weight:700;">8</span>명</span>
-                <span id="lblResOpt1Rev">8,720,000원</span>
-              </div>
-              <div
-                style="display: flex; justify-content: space-between; font-size: 11px; margin-top: 4px; opacity: 0.9;">
-                <span>옵션 2 (자율) 등록: <span id="lblResOpt2Count" style="font-weight:700;">12</span>명</span>
-                <span id="lblResOpt2Rev">8,640,000원</span>
-              </div>
-              <div
-                style="display: flex; justify-content: space-between; font-size: 14px; font-weight: 800; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 8px; margin-top: 8px;">
-                <span>총 매출 예상액</span>
-                <span style="color: var(--c-amber);" id="lblResTotalRev">17,360,000원</span>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-    <!-- 섹션 6: 추가 확인 필요사항 & 의사결정 보고 결론 -->
-    <div class="section-label">추가 확인 필요사항 & 의사결정 보고 결론</div>
+    <!-- 섹션 4: 추천 프로그램 옵션 -->
+    <div class="section-label">추천 프로그램 옵션</div>
     <div class="grid-2">
-      <!-- 추가 확인 체크리스트 (비워둠 및 동적 추가형) -->
-      <div class="card">
-        <div class="checklist-header">
-          <span class="card-title" style="border:none; padding:0; margin:0;">📋 추가 확인 필요사항</span>
-          <div class="checklist-progress-bg">
-            <div class="checklist-progress-fill" id="chkFill"></div>
-          </div>
-          <span class="checklist-progress-text" id="chkText">0 / 0 완료</span>
+
+      <!-- 옵션 1 -->
+      <div class="option-card">
+        <div class="option-head opt1">
+          <span class="opt-no">OPTION 1</span>
+          <span class="opt-name">복습반 + 레벨 5 라이브 재수강형</span>
         </div>
-        <ul class="checklist-list" id="chkList"
-          style="min-height: 140px; max-height: 240px; overflow-y: auto; margin-top: 10px;">
-          <!-- Dynamically rendered -->
-        </ul>
-        <div
-          style="display: flex; gap: 8px; margin-top: 12px; border-top: 1px dashed var(--c-border); padding-top: 12px;">
-          <input type="text" id="newChkInput" placeholder="새로운 확인 필요사항 입력..."
-            style="flex: 1; padding: 6px 10px; border: 1px solid var(--c-border); border-radius: 6px; font-size: 11.5px; outline: none;">
-          <button onclick="addChecklistItem()"
-            style="padding: 6px 12px; background: var(--c-navy-2); color: #fff; border: none; border-radius: 6px; font-size: 11.5px; font-weight: 700; cursor: pointer; transition: background 0.2s;">추가</button>
+        <div class="option-body">
+          <div>
+            <div class="compose-row">
+              <div class="compose-term">1개월</div>
+              <div class="compose-desc">레벨 3·4 코치 추천 12주 프로그램 라이브 수강권 제공<br><span class="note">복습반 형태 / <b>서비스 제공</b></span></div>
+            </div>
+            <div class="compose-row" style="margin-top:10px;">
+              <div class="compose-term">3개월</div>
+              <div class="compose-desc">레벨 5-2기 라이브 수강권 + 영상 수강권<br><span class="note">실시간 수업 참여 및 반복 복습 가능</span></div>
+            </div>
+            <div class="compose-row total" style="margin-top:10px;">
+              <div class="compose-term">총 4개월</div>
+              <div class="compose-desc">유채코치 스페셜 영상 제공<br><span class="note">4개월간 제공</span></div>
+            </div>
+          </div>
+
+          <div class="sub-block">
+            <div class="sb-title">🗓️ 일정</div>
+            <table style="font-size:11.5px;">
+              <tbody>
+                <tr><td style="width:45%;"><b>1개월 복습반</b></td><td>2026.06.08 ~ 07.03</td></tr>
+                <tr><td><b>1주 휴식</b></td><td>2026.07.04 ~ 07.12</td></tr>
+                <tr><td><b>레벨 5-2기 라이브 재수강</b></td><td>2026.07.13 ~ 10.02</td></tr>
+                <tr><td><b>신규 클래스 시작</b></td><td>2027.01.04</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="sub-block">
+            <div class="sb-title">💰 기존 재등록 금액 참고</div>
+            <div class="price-ref">
+              <div class="pr-item"><div class="pr-label">레벨 4-1기</div><div class="pr-val">800,000<small>원</small></div></div>
+              <div class="pr-item"><div class="pr-label">레벨 4-2기</div><div class="pr-val">870,000<small>원</small></div></div>
+            </div>
+          </div>
+
+          <div class="sub-block">
+            <div class="sb-title">👍 추천 대상</div>
+            <div class="quote">레벨 5를 한 번 더 라이브로 함께 진행하며, 동작 완성도와 체력을 제대로 끌어올리고 싶은 분들께 추천드립니다.</div>
+          </div>
+
+          <div class="sub-block">
+            <div class="sb-title">🧭 운영 판단</div>
+            <div class="op-judge">
+              <div class="li">라이브 참여가 가능하고, 코치와 함께 꾸준히 운동 강도를 이어가고 싶은 회원에게 적합</div>
+              <div class="li">기존 재등록 금액 사례가 있어 현실적인 가격 설정 기준으로 활용 가능</div>
+              <div class="li warn">단, 레벨 5-2기 종료 후 신규 클래스까지 약 3개월이 남아 해당 기간 추가 영상 제공·유지 관리 방식 검토 필요</div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- 최종 결론 -->
-      <div class="ceo-report-card" style="display: flex; flex-direction: column; justify-content: space-between;">
-        <div>
-          <h3
-            style="border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 8px; margin-bottom: 12px; font-size: 15px; font-weight: 800; color: #fff;">
-            보고용 핵심 결론</h3>
-          <ul>
-            <li>신규 클래스는 단순 레벨6 확장이 아닌 새로운 컨셉형 클래스로 포지셔닝해야 수강 당위성이 올라갑니다.</li>
-            <li>2026년 11월 2일 즉시 개설 시 레벨 5-2기의 공백을 최소화(1개월)하여 이탈 방지에 가장 유리합니다.</li>
-            <li>2027년 1월 개설로 지연 결정될 경우, 수료자 이탈 방지를 위해 대기 기간을 연계할 유지 프로그램 혹은 재수강 패키지 제안이 필수로 수반되어야 합니다.</li>
-            <li>과거 데이터(4-1기 -> 5-1기)에서도 전환 회원의 55%가 재수강으로 대기 기간을 버틴 이력이 존재합니다.</li>
-
-          </ul>
+      <!-- 옵션 2 -->
+      <div class="option-card">
+        <div class="option-head opt2">
+          <span class="opt-no">OPTION 2</span>
+          <span class="opt-name">레벨 5 영상 자율 수행형</span>
         </div>
-        <div class="ceo-conclusion-box" style="margin-top: 16px;">
-          <div class="ceo-conclusion-title"
-            style="font-size: 11px; font-weight: 800; color: var(--c-amber); text-transform: uppercase;">한 줄 요약</div>
-          <div class="ceo-conclusion-text"
-            style="font-size: 12.5px; font-weight: 700; margin-top: 4px; line-height: 1.4; color: #fff;">
-            기존 수강생 이탈 방지에는 11월 시작이 가장 유리하며, 1월 시작 시 과거 전환 회원의 55%가 재수강으로 연결된 이력을 근거로 현실화된 금액 조정안 패키지를 연계 설계해야 함.
+        <div class="option-body">
+          <div>
+            <div class="compose-row">
+              <div class="compose-term">3개월</div>
+              <div class="compose-desc">레벨 5 영상 수강권<br><span class="note">자율적으로 루틴 수행</span></div>
+            </div>
+            <div class="compose-row" style="margin-top:10px;">
+              <div class="compose-term">3개월</div>
+              <div class="compose-desc">유채코치 스페셜 영상 제공<br><span class="note">운동 감각 유지 목적</span></div>
+            </div>
           </div>
+
+          <div class="sub-block">
+            <div class="sb-title">👍 추천 대상</div>
+            <div class="quote">라이브 재수강은 부담스럽지만, 혼자서 루틴과 운동 영상을 받아 자율적으로 운동 감각을 유지하고 싶은 분들께 추천드립니다.</div>
+          </div>
+
+          <div class="sub-block">
+            <div class="sb-title">🧭 운영 판단</div>
+            <div class="op-judge">
+              <div class="li">라이브 일정 참여가 어렵거나 재수강 비용에 부담을 느끼는 회원에게 적합</div>
+              <div class="li">회원이 원하는 시간에 운동할 수 있어 진입 부담은 낮음</div>
+              <div class="li warn">다만 라이브형보다 수행 관리·지속 참여율이 낮아질 수 있어 인증 또는 월별 체크 방식 포함 여부 검토 필요</div>
+            </div>
+          </div>
+
+          <div class="sub-block" style="margin-top:auto;">
+            <div class="sb-title" style="color:#c4710f;">⚠️ 추가 확인 필요</div>
+            <div class="op-judge" style="color:var(--c-mute);">
+              현재 <b>3개월 제공 기준</b>만 정리된 상태로, 운영 기간 배치 방식 확정이 필요합니다. (아래 섹션 참조)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 섹션 5: 추가 확인 필요사항 -->
+    <div class="section-label">추가 확인 필요사항 — 옵션 2 운영 방식</div>
+    <div class="grid-1">
+      <div class="card">
+        <div class="card-title">🔎 옵션 2 운영 기간 배치 검토 <span class="badge">3개월 제공 기준</span></div>
+        <table class="check-table" style="margin-top:6px;">
+          <thead>
+            <tr>
+              <th style="width:26%;">운영 방식</th>
+              <th style="width:28%;">기간 예시</th>
+              <th>확인 필요 내용</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>종료 직후 바로 제공</b></td>
+              <td>2026.06.08 ~ 09.04 전후</td>
+              <td>이후 신규 클래스까지 <span class="pill" style="background:var(--c-red-soft);color:var(--c-red);">약 4개월 공백</span> 발생</td>
+            </tr>
+            <tr>
+              <td><b>복습반 이후 제공</b></td>
+              <td>2026.07.13 ~ 10.02 전후</td>
+              <td>옵션 1과 동일하게 이후 <span class="pill" style="background:var(--c-amber-soft);color:#c4710f;">약 3개월 공백</span> 발생</td>
+            </tr>
+            <tr>
+              <td><b>신규 클래스 직전까지 이어지도록 배치</b></td>
+              <td>별도 산정 필요</td>
+              <td><span class="pill green">공백 최소화</span> 가능 여부 검토</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 섹션 6: 결론 -->
+    <div class="section-label">의사결정 검토 결론</div>
+    <div class="grid-1">
+      <div class="conclusion-card">
+        <h3>운영 목적 및 핵심 검토 사항</h3>
+        <ul>
+          <li>레벨 5 종료 후 신규 클래스(2027.01.04)까지 공백이 발생하므로, 회원의 운동 습관이 끊기지 않도록 연결 프로그램 제안이 필요합니다.</li>
+          <li>특히 레벨 5-1기 회원은 6월 5일 종료 후 약 7개월의 대기 기간이 생겨, 재수강 또는 영상 기반 유지 프로그램을 함께 제안해야 합니다.</li>
+          <li>옵션 1(라이브 재수강형)은 4개월 연결이 가능하나, 10.02 이후 약 3개월 잔여 공백에 대한 유지 방식 검토가 추가로 필요합니다.</li>
+          <li>옵션 2(영상 자율형)는 운영 기간 배치 방식(3가지)에 따라 잔여 공백이 달라지므로 확정이 필요합니다.</li>
+        </ul>
+        <div class="conclusion-summary">
+          <div class="cs-label">한 줄 요약</div>
+          <div class="cs-text">라이브 참여·비용 부담에 따라 옵션 1·2를 제시하되, 두 안 모두 레벨 5-2기 종료(10.02) 이후 신규 클래스(2027.01.04)까지의 잔여 공백을 메울 유지 방식을 함께 확정해야 함.</div>
         </div>
       </div>
     </div>
 
     <!-- 푸터 -->
-    <div style="text-align:center;padding:18px;color:#8888a0;font-size:11px">
-      신규 클래스 및 레벨 5 연결운영 검토안 · 안티그래비티 내부 보고용 · LocalStorage를 통해 체크리스트 상태 자동 저장
+    <div class="footer">
+      새로운 클래스 대기 기간 추천 프로그램 검토 · 내부 보고용<br>
+      검토 기준일 2026-05-29 · 원문 보고서 기반 구성
     </div>
-    <script>
-      // 1. Gantt Chart Tooltip Script
-      (function () {
-        var tip = document.getElementById('ganttTooltip');
-        var chart = document.getElementById('ganttChart');
-        if (!tip || !chart) return;
-        var container = chart.parentElement;
-
-        function showTip(e, html) {
-          tip.innerHTML = html;
-          tip.classList.add('visible');
-          var rect = container.getBoundingClientRect();
-          var x = e.clientX - rect.left;
-          var y = e.clientY - rect.top;
-          var tipW = tip.offsetWidth;
-          var tipH = tip.offsetHeight;
-          if (x + tipW + 20 > rect.width) x = x - tipW - 14;
-          else x = x + 14;
-          if (y - tipH - 10 < 0) y = y + 14;
-          else y = y - tipH - 10;
-          tip.style.left = x + 'px';
-          tip.style.top = y + 'px';
-        }
-
-        function hideTip() { tip.classList.remove('visible'); }
-
-        var bars = chart.querySelectorAll('.gantt-bar');
-        bars.forEach(function (el) {
-          el.addEventListener('mouseenter', function (e) {
-            var title = el.getAttribute('data-title');
-            var date = el.getAttribute('data-date');
-            var members = el.getAttribute('data-members');
-            var desc = el.getAttribute('data-desc');
-
-            var html = '<div class="t-title">' + title + '</div>'
-              + '<div class="t-meta"><span>일정</span><b>' + date + '</b></div>'
-              + '<div class="t-meta"><span>인원</span><b>' + members + '</b></div>'
-              + '<div class="t-desc">💡 ' + desc + '</div>';
-            showTip(e, html);
-          });
-          el.addEventListener('mousemove', function (e) {
-            var rect = container.getBoundingClientRect();
-            var x = e.clientX - rect.left;
-            var y = e.clientY - rect.top;
-            var tipW = tip.offsetWidth;
-            var tipH = tip.offsetHeight;
-            if (x + tipW + 20 > rect.width) x = x - tipW - 14;
-            else x = x + 14;
-            if (y - tipH - 10 < 0) y = y + 14;
-            else y = y - tipH - 10;
-            tip.style.left = x + 'px';
-            tip.style.top = y + 'px';
-          });
-          el.addEventListener('mouseleave', hideTip);
-        });
-      })();
-
-      // 2. CEO Sim Card Logic
-      function setCeoSim(rate) {
-        // Update active button state
-        var btns = document.querySelectorAll('.sim-control-btn');
-        btns.forEach(function (b) { b.classList.remove('active'); });
-        event.target.classList.add('active');
-
-        var simBox = document.getElementById('ceoSimBox');
-        var simStatus = document.getElementById('ceoSimStatus');
-        var simDesc = document.getElementById('ceoSimDesc');
-
-        if (rate === 80) {
-          simStatus.innerHTML = "🟢 단독 운영 가능";
-          simStatus.style.color = "var(--c-green)";
-          simDesc.innerHTML = "예상 인원 약 28명으로 안정적 단독 개설 가능 (시나리오 A)";
-          simBox.style.background = "var(--c-green-soft)";
-        } else if (rate === 70) {
-          simStatus.innerHTML = "🟡 개설 경계 (최소 충족)";
-          simStatus.style.color = "var(--c-amber)";
-          simDesc.innerHTML = "예상 인원 약 25명으로 최소 운영 요건을 확인해야 합니다.";
-          simBox.style.background = "var(--c-amber-soft)";
-        } else if (rate === 60) {
-          simStatus.innerHTML = "🔴 단독 개설 불가";
-          simStatus.style.color = "var(--c-red)";
-          simDesc.innerHTML = "예상 인원 약 21명으로 부족. 4-5기 종료 후 합류 개설 필요 (시나리오 B)";
-          simBox.style.background = "var(--c-red-soft)";
-        }
-      }
-
-      // 3. Scenario Simulator
-      function setScenario(scen) {
-        var btns = document.querySelectorAll('.scenario-btn');
-        btns.forEach(function (b, idx) {
-          b.classList.remove('active');
-          if (scen === 'A' && idx === 0) b.classList.add('active');
-          if (scen === 'B' && idx === 1) b.classList.add('active');
-          if (scen === 'C' && idx === 2) b.classList.add('active');
-        });
-
-        var title = document.getElementById('scenTitle');
-        var desc = document.getElementById('scenDesc');
-        var badge = document.getElementById('scenBadge');
-        var ganttBar = document.getElementById('gantt53Bar');
-        var ganttBLink = document.getElementById('ganttBLink');
-
-        if (scen === 'A') {
-          title.innerHTML = "A안: 등록 인원 충분시 단독 개설";
-          desc.innerHTML = "• <b>조건</b>: 레벨 4-4기에서 등록률 75~80% 이상 확보 (약 25~28명)<br>• <b>일정</b>: 2026년 11월 9일 레벨 5-3기 즉시 시작 (2주 휴식)<br>• <b>판단</b>: 공백 없이 빠른 연결이 가능하여 가장 권장되는 루트입니다.";
-          badge.innerHTML = "A안: 11월 9일 단독 개설";
-          badge.className = "scenario-badge-flow a";
-
-          // Update Gantt SVG elements visual state
-          if (ganttBar) {
-            ganttBar.setAttribute('x', '633');
-            ganttBar.setAttribute('width', '258');
-            ganttBar.setAttribute('fill', 'var(--c-amber)');
-            ganttBar.setAttribute('data-date', '2026-11-09 ~ 2027-01-29');
-            ganttBar.setAttribute('data-desc', '레벨 4-4기 등록 인원이 충분하여 11월 9일에 예정대로 개설됩니다.');
-          }
-          if (ganttBLink) ganttBLink.setAttribute('opacity', '0.1');
-        } else if (scen === 'B') {
-          title.innerHTML = "B안: 등록 인원 부족시 합류 개설";
-          desc.innerHTML = "• <b>조건</b>: 레벨 4-4기 재등록 저조로 단독 개설 불가 (약 21명 이하)<br>• <b>일정</b>: 2027년 1월 이후 개설 (레벨 4-5기 종료 인원과 병합)<br>• <b>판단</b>: 대기 기간이 발생하므로 회원별 유지 프로그램 제공이 수반됩니다.";
-          badge.innerHTML = "B안: 2027년 1월 이후 합류 개설";
-          badge.className = "scenario-badge-flow b";
-
-          if (ganttBar) {
-            ganttBar.setAttribute('x', '811');
-            ganttBar.setAttribute('width', '150'); // Shortened display or shift
-            ganttBar.setAttribute('fill', 'var(--c-blue)');
-            ganttBar.setAttribute('data-date', '2027-01-04 이후 시작');
-            ganttBar.setAttribute('data-desc', '레벨 4-4기 인원 부족으로 인해 4-5기 종료 시점에 통합되어 개설됩니다.');
-          }
-          if (ganttBLink) ganttBLink.setAttribute('opacity', '0.8');
-        } else if (scen === 'C') {
-          title.innerHTML = "C안: 일부 대기 회원 별도 관리";
-          desc.innerHTML = "• <b>조건</b>: 일부 인원만 대기 희망 및 통합 불가 회원 발생<br>• <b>일정</b>: 임시 대기 프로그램 또는 소수 정예 별도 세션 운영 검토<br>• <b>판단</b>: 코칭 리소스 대비 수익성(LTV) 검토가 선행되어야 합니다.";
-          badge.innerHTML = "C안: 별도 대기 관리 & 통합 조율";
-          badge.className = "scenario-badge-flow c";
-
-          if (ganttBar) {
-            ganttBar.setAttribute('x', '633');
-            ganttBar.setAttribute('width', '258');
-            ganttBar.setAttribute('fill', '#ccc');
-            ganttBar.setAttribute('data-date', '개설 일정 보류 및 개별 대응');
-            ganttBar.setAttribute('data-desc', '단독 개설 대신 대기 관리 및 재수강 연결안을 개별 제안합니다.');
-          }
-          if (ganttBLink) ganttBLink.setAttribute('opacity', '0.1');
-        }
-      }
-
-      // 4. Dynamic Checklist LocalStorage Save & Load Logic
-      var checklistItems = [];
-      try {
-        var stored = localStorage.getItem('diet_checklist_items');
-        if (stored) {
-          checklistItems = JSON.parse(stored);
-        }
-      } catch (e) {
-        console.error("LocalStorage load error", e);
-      }
-
-      // Initialize checks on page load
-      window.addEventListener('load', function () {
-        var input = document.getElementById('newChkInput');
-        if (input) {
-          input.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-              addChecklistItem();
-            }
-          });
-        }
-        renderChecklist();
-        if (typeof calcPrices === 'function') calcPrices();
-      });
-
-      function saveChecklist() {
-        try {
-          localStorage.setItem('diet_checklist_items', JSON.stringify(checklistItems));
-        } catch (e) {
-          console.error("LocalStorage save error", e);
-        }
-        renderChecklist();
-      }
-
-      function renderChecklist() {
-        var listEl = document.getElementById('chkList');
-        if (!listEl) return;
-        listEl.innerHTML = '';
-
-        if (checklistItems.length === 0) {
-          listEl.innerHTML = '<li style="justify-content: center; color: var(--c-mute); font-size: 11.5px; padding: 25px 0;">등록된 확인 사항이 없습니다. 아래 입력란을 통해 새로운 확인 필요사항을 추가해 보세요.</li>';
-          document.getElementById('chkFill').style.width = '0%';
-          document.getElementById('chkText').innerText = '0 / 0 완료';
-          return;
-        }
-
-        var checkedCount = 0;
-        checklistItems.forEach(function (item, idx) {
-          if (item.checked) checkedCount++;
-
-          var li = document.createElement('li');
-          li.className = 'checklist-item' + (item.checked ? ' checked' : '');
-          li.style.display = 'flex';
-          li.style.justifyContent = 'space-between';
-          li.style.alignItems = 'center';
-          li.style.padding = '8px 10px';
-          li.style.borderBottom = '1px solid #f0f0f5';
-
-          var leftSpan = document.createElement('span');
-          leftSpan.style.display = 'flex';
-          leftSpan.style.alignItems = 'center';
-          leftSpan.style.gap = '8px';
-          leftSpan.style.flex = '1';
-
-          var cb = document.createElement('input');
-          cb.type = 'checkbox';
-          cb.checked = item.checked;
-          cb.onchange = function () {
-            checklistItems[idx].checked = cb.checked;
-            saveChecklist();
-          };
-
-          var text = document.createElement('span');
-          text.className = 'checklist-text';
-          text.innerText = item.text;
-          text.style.cursor = 'pointer';
-          text.style.fontSize = '11.5px';
-          text.onclick = function () {
-            cb.checked = !cb.checked;
-            checklistItems[idx].checked = cb.checked;
-            saveChecklist();
-          };
-
-          leftSpan.appendChild(cb);
-          leftSpan.appendChild(text);
-
-          var delBtn = document.createElement('button');
-          delBtn.innerHTML = '🗑️';
-          delBtn.style.background = 'none';
-          delBtn.style.border = 'none';
-          delBtn.style.cursor = 'pointer';
-          delBtn.style.fontSize = '12px';
-          delBtn.style.padding = '2px 6px';
-          delBtn.onclick = function () {
-            checklistItems.splice(idx, 1);
-            saveChecklist();
-          };
-
-          li.appendChild(leftSpan);
-          li.appendChild(delBtn);
-          listEl.appendChild(li);
-        });
-
-        var percent = (checkedCount / checklistItems.length) * 100;
-        document.getElementById('chkFill').style.width = percent + '%';
-        document.getElementById('chkText').innerText = checkedCount + ' / ' + checklistItems.length + ' 완료';
-      }
-
-      function addChecklistItem() {
-        var input = document.getElementById('newChkInput');
-        var text = input.value.trim();
-        if (!text) return;
-        checklistItems.push({ text: text, checked: false });
-        input.value = '';
-        saveChecklist();
-      }
-
-      // 5. Interactive Pricing & Revenue Simulator Logic
-      function applyPreset(preset) {
-        var btns = document.querySelectorAll('.sim-control-btn');
-        btns.forEach(function (b) { b.classList.remove('active'); });
-
-        if (preset === 'original') {
-          document.getElementById('btnPresetOriginal').classList.add('active');
-          document.getElementById('inpRevPrice').value = 320000;
-          document.getElementById('inpLivePrice').value = 870000;
-          document.getElementById('inpVidPrice').value = 480000;
-          document.getElementById('inpOpt1Disc').value = 100000;
-          document.getElementById('inpOpt2Disc').value = 80000;
-        } else if (preset === 'realistic') {
-          document.getElementById('btnPresetRealistic').classList.add('active');
-          document.getElementById('inpRevPrice').value = '';
-          document.getElementById('inpLivePrice').value = '';
-          document.getElementById('inpVidPrice').value = '';
-          document.getElementById('inpOpt1Disc').value = '';
-          document.getElementById('inpOpt2Disc').value = '';
-        }
-        calcPrices();
-      }
-
-      function calcPrices() {
-        var revPriceVal = document.getElementById('inpRevPrice').value;
-        var livePriceVal = document.getElementById('inpLivePrice').value;
-        var vidPriceVal = document.getElementById('inpVidPrice').value;
-        var opt1DiscVal = document.getElementById('inpOpt1Disc').value;
-        var opt2DiscVal = document.getElementById('inpOpt2Disc').value;
-
-        var revPrice = parseInt(revPriceVal) || 0;
-        var livePrice = parseInt(livePriceVal) || 0;
-        var vidPrice = parseInt(vidPriceVal) || 0;
-        var opt1Disc = parseInt(opt1DiscVal) || 0;
-        var opt2Disc = parseInt(opt2DiscVal) || 0;
-
-        var convCount = parseInt(document.getElementById('inpConvCount').value) || 0;
-        var opt1Share = parseInt(document.getElementById('inpOpt1Share').value) || 0;
-        var opt2Share = 100 - opt1Share;
-
-        // Calculate options final package prices
-        var opt1Total = revPrice + livePrice;
-        var opt1Final = opt1Total - opt1Disc;
-
-        var opt2Total = revPrice + vidPrice;
-        var opt2Final = opt2Total - opt2Disc;
-
-        // Update Option cards text labels
-        document.getElementById('lblOpt1Rev').innerText = revPriceVal ? revPrice.toLocaleString() + '원' : '-';
-        document.getElementById('lblOpt1Live').innerText = livePriceVal ? livePrice.toLocaleString() + '원' : '-';
-        document.getElementById('lblOpt1Disc').innerText = opt1DiscVal ? '-' + opt1Disc.toLocaleString() + '원' : '-';
-        document.getElementById('lblOpt1Final').innerText = (revPriceVal || livePriceVal) ? opt1Final.toLocaleString() + '원' : '-';
-
-        document.getElementById('lblOpt2Rev').innerText = revPriceVal ? revPrice.toLocaleString() + '원' : '-';
-        document.getElementById('lblOpt2Vid').innerText = vidPriceVal ? vidPrice.toLocaleString() + '원' : '-';
-        document.getElementById('lblOpt2Disc').innerText = opt2DiscVal ? '-' + opt2Disc.toLocaleString() + '원' : '-';
-        document.getElementById('lblOpt2Final').innerText = (revPriceVal || vidPriceVal) ? opt2Final.toLocaleString() + '원' : '-';
-
-        // Update simulator slider label
-        document.getElementById('lblOpt1Share').innerText = opt1Share + '% (옵션 2: ' + opt2Share + '%)';
-
-        // Revenue calculations
-        var opt1Count = Math.round(convCount * (opt1Share / 100));
-        var opt2Count = convCount - opt1Count;
-
-        var opt1RevVal = opt1Count * opt1Final;
-        var opt2RevVal = opt2Count * opt2Final;
-        var totalRevVal = opt1RevVal + opt2RevVal;
-
-        // Update simulation results labels
-        document.getElementById('lblResOpt1Count').innerText = opt1Count;
-        document.getElementById('lblResOpt1Rev').innerText = (revPriceVal || livePriceVal) ? opt1RevVal.toLocaleString() + '원' : '-';
-        document.getElementById('lblResOpt2Count').innerText = opt2Count;
-        document.getElementById('lblResOpt2Rev').innerText = (revPriceVal || vidPriceVal) ? opt2RevVal.toLocaleString() + '원' : '-';
-        document.getElementById('lblResTotalRev').innerText = (revPriceVal || livePriceVal || vidPriceVal) ? totalRevVal.toLocaleString() + '원' : '-';
-      }
-
-    </script>
+  </div>
 </body>
 
 </html>
