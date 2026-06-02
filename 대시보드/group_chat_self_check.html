@@ -290,7 +290,7 @@
     }
 
     .sheet-table {
-      width: 1750px;
+      width: 1590px;
       table-layout: fixed;
       border-collapse: collapse;
       font-size: 12px;
@@ -560,8 +560,7 @@
                 <th style="width: 90px;">업로드 시간</th>
                 <th style="width: 95px;">회원 반응</th>
                 <th style="width: 80px;">반응수</th>
-                <th style="width: 250px;">단톡 활용 사례</th>
-                <th style="width: 180px;">미진행 사유</th>
+                <th style="width: 280px;">미진행 사유</th>
                 <th style="width: 105px;">퇴근 전 셀프체크</th>
                 <th style="width: 90px;">팀장 확인</th>
                 <th style="width: 100px;">실행 상태</th>
@@ -630,18 +629,18 @@
 
   // 기본 월간 샘플 데이터셋 (2026년 6월 기준 일자별)
   var defaultMonthlyChecks = [
-    { id: 1, date: '2026-06-01', coach: '한서규', group: '13기 2조', topic: '월요 운동 시작 챌린지', uploaded: true, uploadTime: '10:30', reaction: '긍정적', reactionCount: 5, caseDetail: '스쿼트 자세 질문 피드백 연계', reason: '', selfCheck: true, leaderConfirm: true },
-    { id: 2, date: '2026-06-01', coach: '송희진', group: '3-6기 단톡방', topic: '무릎 통증 완화 스트레칭', uploaded: true, uploadTime: '14:15', reaction: '보통', reactionCount: 3, caseDetail: '통증 호소 회원 개별 상담 전환', reason: '', selfCheck: true, leaderConfirm: true },
-    { id: 3, date: '2026-06-02', date_hint: '오늘', coach: '김남곤', group: '2-9기 단톡방', topic: '8주차 눈바디 중간 인증 독려', uploaded: true, uploadTime: '09:20', reaction: '보통', reactionCount: 2, caseDetail: '눈바디 예시 사진 업로드', reason: '', selfCheck: true, leaderConfirm: false },
-    { id: 4, date: '2026-06-02', date_hint: '오늘', coach: '한서규', group: '13기 3조', topic: '인바디 제출 및 블랙요원 공지', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, caseDetail: '', reason: '업로드 예정', selfCheck: false, leaderConfirm: false },
-    { id: 5, date: '2026-06-02', date_hint: '오늘', coach: '정유채', group: '코칭 스터디방', topic: '카톡 실전 피드백 가이드 공지', uploaded: true, uploadTime: '11:00', reaction: '긍정적', reactionCount: 6, caseDetail: '실전 화술 교재 PDF 공유', reason: '', selfCheck: true, leaderConfirm: true },
-    { id: 6, date: '2026-06-03', coach: '송희진', group: '3-6기 단톡방', topic: '수요 식단 체크 및 대체식 제안', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, caseDetail: '', reason: '', selfCheck: false, leaderConfirm: false },
-    { id: 7, date: '2026-06-03', coach: '강민재', group: '2-10기 사전방', topic: '사전 대기 기간 가이드 배포', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, caseDetail: '', reason: '', selfCheck: false, leaderConfirm: false },
-    { id: 8, date: '2026-06-04', coach: '김남곤', group: '2-9기 단톡방', topic: '이탈 위험 회원 개별 소통 점검', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, caseDetail: '', reason: '', selfCheck: false, leaderConfirm: false },
-    { id: 9, date: '2026-06-04', coach: '박혜진', group: '13기 1조', topic: '1조 라이브 참여 회복 챌린지', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, caseDetail: '', reason: '', selfCheck: false, leaderConfirm: false },
-    { id: 10, date: '2026-06-05', coach: '이준석', group: '13기 소통방', topic: '첫 주차 회원 동작 미션 안내', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, caseDetail: '', reason: '', selfCheck: false, leaderConfirm: false },
-    { date: '2026-06-05', coach: '조민정', group: '2-10기 사전방', topic: '인바디 사전 수집 독려', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, caseDetail: '', reason: '', selfCheck: false, leaderConfirm: false },
-    { date: '2026-06-05', coach: '성민경', group: '3-6기 단톡방', topic: '단톡방 지목형 챌린지 1회차 오픈', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, caseDetail: '', reason: '', selfCheck: false, leaderConfirm: false }
+    { id: 1, date: '2026-06-01', coach: '한서규', group: '1-13 2조', topic: '월요 운동 시작 챌린지', uploaded: true, uploadTime: '10:30', reaction: '긍정적', reactionCount: 5, reason: '', selfCheck: true, leaderConfirm: true },
+    { id: 2, date: '2026-06-01', coach: '송희진', group: '3-6 단톡방', topic: '무릎 통증 완화 스트레칭', uploaded: true, uploadTime: '14:15', reaction: '보통', reactionCount: 3, reason: '', selfCheck: true, leaderConfirm: true },
+    { id: 3, date: '2026-06-02', date_hint: '오늘', coach: '김남곤', group: '2-9 단톡방', topic: '8주차 눈바디 중간 인증 독려', uploaded: true, uploadTime: '09:20', reaction: '보통', reactionCount: 2, reason: '', selfCheck: true, leaderConfirm: false },
+    { id: 4, date: '2026-06-02', date_hint: '오늘', coach: '한서규', group: '1-13 3조', topic: '인바디 제출 및 블랙요원 공지', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, reason: '업로드 예정', selfCheck: false, leaderConfirm: false },
+    { id: 5, date: '2026-06-02', date_hint: '오늘', coach: '정유채', group: '코칭 스터디방', topic: '카톡 실전 피드백 가이드 공지', uploaded: true, uploadTime: '11:00', reaction: '긍정적', reactionCount: 6, reason: '', selfCheck: true, leaderConfirm: true },
+    { id: 6, date: '2026-06-03', coach: '송희진', group: '3-6 단톡방', topic: '수요 식단 체크 및 대체식 제안', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, reason: '', selfCheck: false, leaderConfirm: false },
+    { id: 7, date: '2026-06-03', coach: '강민재', group: '2-10 사전방', topic: '사전 대기 기간 가이드 배포', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, reason: '', selfCheck: false, leaderConfirm: false },
+    { id: 8, date: '2026-06-04', coach: '김남곤', group: '2-9 단톡방', topic: '이탈 위험 회원 개별 소통 점검', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, reason: '', selfCheck: false, leaderConfirm: false },
+    { id: 9, date: '2026-06-04', coach: '박혜진', group: '1-13 1조', topic: '1조 라이브 참여 회복 챌린지', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, reason: '', selfCheck: false, leaderConfirm: false },
+    { id: 10, date: '2026-06-05', coach: '이준석', group: '1-13 소통방', topic: '첫 주차 회원 동작 미션 안내', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, reason: '', selfCheck: false, leaderConfirm: false },
+    { date: '2026-06-05', coach: '조민정', group: '2-10 사전방', topic: '인바디 사전 수집 독려', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, reason: '', selfCheck: false, leaderConfirm: false },
+    { date: '2026-06-05', coach: '성민경', group: '3-6 단톡방', topic: '단톡방 지목형 챌린지 1회차 오픈', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, reason: '', selfCheck: false, leaderConfirm: false }
   ];
 
   // 샘플 데이터에 고유 ID 보장
@@ -717,7 +716,6 @@
       uploadTime: '',
       reaction: '',
       reactionCount: 0,
-      caseDetail: '',
       reason: '',
       selfCheck: false,
       leaderConfirm: false
@@ -813,7 +811,6 @@
         '<td><input type="text" class="sheet-input" value="' + (item.uploadTime || '') + '" placeholder="시간" onchange="updateGroupChatField(' + item.id + ', \'uploadTime\', this.value)"></td>',
         '<td><select class="sheet-select" onchange="updateGroupChatField(' + item.id + ', \'reaction\', this.value)">' + reactionOptions + '</select></td>',
         '<td><input type="number" class="sheet-input" style="width: 50px;" value="' + (item.reactionCount || 0) + '" onchange="updateGroupChatField(' + item.id + ', \'reactionCount\', parseInt(this.value) || 0)"></td>',
-        '<td><input type="text" class="sheet-input" style="text-align: left;" value="' + (item.caseDetail || '') + '" placeholder="우수 사례 적기" onchange="updateGroupChatField(' + item.id + ', \'caseDetail\', this.value)"></td>',
         '<td><input type="text" class="sheet-input" style="text-align: left;" value="' + (item.reason || '') + '" placeholder="미진행 사유 적기" onchange="updateGroupChatField(' + item.id + ', \'reason\', this.value)"></td>',
         '<td><input type="checkbox" class="sheet-checkbox" ' + (item.selfCheck ? 'checked' : '') + ' onchange="updateGroupChatField(' + item.id + ', \'selfCheck\', this.checked)"></td>',
         '<td><input type="checkbox" class="sheet-checkbox" ' + (item.leaderConfirm ? 'checked' : '') + ' onchange="updateGroupChatField(' + item.id + ', \'leaderConfirm\', this.checked)"></td>',
