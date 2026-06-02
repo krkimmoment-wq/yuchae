@@ -669,19 +669,22 @@
             var cohort = '';
             var groupDetail = item.group;
             
-            // '1-13 2조' 형태 매칭 시도
-            var match = item.group.match(/^(\d+)-(\d+)(.*)$/);
-            if (match) {
-              level = match[1];
-              cohort = match[2];
-              groupDetail = match[3].trim();
+            // '13기 2조' 형태 매칭 시도 (기존 레벨 1 기수 표기)
+            var matchOnlyCohort = item.group.match(/^(\d+)기\s*(.*)$/);
+            if (matchOnlyCohort) {
+              level = '1';
+              cohort = matchOnlyCohort[1];
+              groupDetail = matchOnlyCohort[2].trim();
             } else {
-              // '3-6 단톡방' 매칭 시도
-              var matchSpace = item.group.match(/^(\d+)-(\d+)\s+(.*)$/);
-              if (matchSpace) {
-                level = matchSpace[1];
-                cohort = matchSpace[2];
-                groupDetail = matchSpace[3].trim();
+              // '1-13 2조' 형태 매칭 시도
+              var match = item.group.match(/^(\d+)-(\d+)(.*)$/);
+              if (match) {
+                level = match[1];
+                cohort = match[2];
+                groupDetail = match[3].trim();
+                if (groupDetail.startsWith('기')) {
+                  groupDetail = groupDetail.substring(1).trim();
+                }
               }
             }
             item.level = level;
