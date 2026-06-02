@@ -857,9 +857,8 @@
         };
       });
 
-      // 실행률 내림차순 정렬 (동일시 이름 오름차순)
+      // 코치명 기준 가나다 순 정렬
       coachStats.sort(function(a, b) {
-        if (b.rate !== a.rate) return b.rate - a.rate;
         return a.name.localeCompare(b.name);
       });
 
