@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="레벨 5-1기 종료 후 신규 클래스(2027.01.04)까지의 대기 기간 연결 운영 검토 및 추천 프로그램 보고용 대시보드.">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <title>새로운 클래스 대기 기간 추천 프로그램 검토</title>
+  <style>
+    :root {
+      --c-navy: #1f2746;
+      --c-navy-2: #2d3561;
+      --c-blue: #4d8cff;
+      --c-blue-soft: #e8f0ff;
+      --c-green: #28c76f;
+      --c-green-soft: #e8faf0;
+      --c-amber: #ff9f43;
+      --c-amber-soft: #fff5ec;
+      --c-red: #ea5455;
+      --c-red-soft: #fdf2f2;
+      --c-text: #1a1a2e;
+      --c-mute: #6c7293;
+      --c-mute-2: #8e95b0;
+      --c-bg: #f5f6fa;
+      --c-card: #ffffff;
+      --c-border: #ebedf5;
+      --shadow-sm: 0 2px 8px rgba(31, 39, 70, 0.06);
+      --shadow-md: 0 6px 20px rgba(31, 39, 70, 0.08);
+      --shadow-lg: 0 12px 32px rgba(31, 39, 70, 0.12);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, 'Pretendard', 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      background: var(--c-bg);
+      color: var(--c-text);
+      line-height: 1.5;
+      padding: 28px 20px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 1180px; margin: 0 auto; }
+    b { color: var(--c-navy-2); font-weight: 700; }
+
+    /* 헤더 */
+    .header {
+      background: linear-gradient(135deg, var(--c-navy) 0%, var(--c-navy-2) 60%, #3d4878 100%);
+      color: #fff;
+      padding: 32px 38px;
+      border-radius: 18px;
+      margin-bottom: 28px;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      right: -50px;
+      top: -50px;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(77, 140, 255, 0.18) 0%, transparent 70%);
+    }
+    .header h1 { font-size: 23px; font-weight: 800; margin-bottom: 6px; letter-spacing: -0.3px; }
+    .header .subtitle { font-size: 13px; opacity: 0.78; font-weight: 400; }
+    .header .timestamp { font-size: 12px; opacity: 0.7; text-align: right; position: relative; }
+    .header .timestamp .big { font-size: 18px; font-weight: 700; opacity: 1; color: #fff; letter-spacing: 0.3px; }
+
+    /* 섹션 라벨 */
+    .section-label {
+      font-size: 11px; font-weight: 700; color: var(--c-mute-2);
+      text-transform: uppercase; letter-spacing: 1.2px;
+      margin: 6px 0 12px 4px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .section-label::before { content: ''; width: 3px; height: 14px; background: var(--c-blue); border-radius: 2px; }
+
+    /* 그리드 */
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 26px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 26px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 26px; }
+    .grid-1 { margin-bottom: 26px; }
+
+    /* 카드 */
+    .card {
+      background: var(--c-card);
+      padding: 22px 24px;
+      border-radius: 14px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--c-border);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .card-title {
+      font-size: 13px; font-weight: 700; color: var(--c-mute);
+      margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--c-border);
+      display: flex; justify-content: space-between; align-items: center; letter-spacing: -0.2px;
+    }
+    .card-title .badge {
+      font-size: 10px; background: var(--c-blue); color: #fff;
+      padding: 3px 9px; border-radius: 11px; font-weight: 600; letter-spacing: 0.2px;
+    }
+
+    /* 요약 KPI 카드 */
+    .summary-card {
+      background: linear-gradient(180deg, #ffffff 0%, #fbfcff 100%);
+      padding: 20px 20px 18px;
+      border-radius: 16px;
+      border: 1px solid var(--c-border);
+      box-shadow: var(--shadow-md);
+      min-height: 200px;
+      display: flex; flex-direction: column;
+      position: relative;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .summary-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 3px; border-radius: 16px 16px 0 0;
+      background: linear-gradient(90deg, var(--c-blue) 0%, var(--c-navy-2) 100%);
+    }
+    .summary-card.is-danger::before { background: linear-gradient(90deg, var(--c-red) 0%, #b83b3c 100%); }
+    .summary-card.is-warn::before { background: linear-gradient(90deg, var(--c-amber) 0%, #d97a1f 100%); }
+    .summary-card.is-ok::before { background: linear-gradient(90deg, var(--c-green) 0%, #1c9c55 100%); }
+    .summary-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+    .summary-title {
+      font-size: 12px; font-weight: 700; color: var(--c-mute);
+      margin-bottom: 12px; padding-bottom: 9px; border-bottom: 1px solid var(--c-border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .summary-title .tag {
+      font-size: 9px; padding: 3px 8px; border-radius: 10px; font-weight: 700; letter-spacing: 0.4px; color: #fff;
+    }
+    .tag.danger { background: var(--c-red); }
+    .tag.warn { background: var(--c-amber); }
+    .tag.ok { background: var(--c-green); }
+    .tag.info { background: var(--c-navy); }
+    .big-number { font-size: 36px; font-weight: 800; color: var(--c-navy-2); line-height: 1.1; letter-spacing: -1px; }
+    .big-number .unit { font-size: 16px; color: var(--c-mute); font-weight: 600; margin-left: 2px; }
+    .big-number.danger { color: var(--c-red); }
+    .big-number.warn { color: var(--c-amber); }
+    .summary-sub { font-size: 12px; color: var(--c-mute); margin-top: 8px; line-height: 1.55; flex: 1; }
+    .summary-foot {
+      font-size: 11px; color: var(--c-blue); font-weight: 600;
+      margin-top: 10px; padding: 6px 10px; background: var(--c-blue-soft); border-radius: 6px; text-align: center;
+    }
+    .summary-list { font-size: 12px; color: var(--c-text); margin-top: 6px; line-height: 1.7; flex: 1; }
+    .summary-list .li { display: flex; align-items: baseline; gap: 7px; }
+    .summary-list .dot { width: 7px; height: 7px; border-radius: 50%; flex: 0 0 auto; margin-top: 5px; }
+
+    /* 타임라인 */
+    .timeline-strip {
+      display: flex; align-items: stretch; gap: 0;
+      padding: 14px 4px 6px; overflow-x: auto;
+    }
+    .tl-node { flex: 1 1 0; min-width: 116px; position: relative; text-align: center; padding: 0 6px; }
+    .tl-node::before {
+      content: ''; position: absolute; top: 26px; left: 50%; right: -50%;
+      height: 3px; background: var(--c-border);
+    }
+    .tl-node:last-child::before { display: none; }
+    .tl-dot {
+      width: 16px; height: 16px; border-radius: 50%; margin: 20px auto 0;
+      background: var(--c-blue); border: 3px solid #fff; box-shadow: 0 0 0 2px var(--c-blue);
+      position: relative; z-index: 2;
+    }
+    .tl-dot.end { background: var(--c-red); box-shadow: 0 0 0 2px var(--c-red); }
+    .tl-dot.rest { background: var(--c-mute-2); box-shadow: 0 0 0 2px var(--c-mute-2); }
+    .tl-dot.launch { background: var(--c-green); box-shadow: 0 0 0 2px var(--c-green); width: 20px; height: 20px; }
+    .tl-date { font-size: 12px; font-weight: 800; color: var(--c-navy-2); margin-top: 12px; }
+    .tl-label { font-size: 11px; color: var(--c-text); margin-top: 4px; font-weight: 600; line-height: 1.35; }
+    .tl-dday { font-size: 10px; color: #fff; background: var(--c-navy-2); border-radius: 9px; padding: 2px 8px; margin-top: 6px; display: inline-block; font-weight: 700; }
+    .tl-dday.soon { background: var(--c-red); }
+    .tl-note { font-size: 10px; color: var(--c-mute); margin-top: 5px; }
+
+    /* 일정 표 */
+    table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+    table th {
+      background: #f8f9fc; padding: 9px 10px; text-align: left; font-weight: 700;
+      color: var(--c-mute); border-bottom: 2px solid #e0e0e8; white-space: nowrap;
+    }
+    table td { padding: 9px 10px; border-bottom: 1px solid #f0f0f5; vertical-align: top; }
+    table tr:last-child td { border-bottom: none; }
+    .pill { display: inline-block; font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 9px; }
+    .pill.blue { background: var(--c-blue-soft); color: #2b6fd6; }
+    .pill.gray { background: #eef0f5; color: var(--c-mute); }
+    .pill.green { background: var(--c-green-soft); color: #1c9c55; }
+
+    /* 시나리오 비교 */
+    .scenario {
+      border: 1px solid var(--c-border); border-radius: 12px; overflow: hidden;
+      background: #fff; display: flex; flex-direction: column; height: 100%;
+    }
+    .scenario-head { padding: 13px 16px; color: #fff; display: flex; align-items: center; gap: 8px; }
+    .scenario-head.danger { background: linear-gradient(135deg, var(--c-red), #c23c3d); }
+    .scenario-head.warn { background: linear-gradient(135deg, var(--c-amber), #d97a1f); }
+    .scenario-head.info { background: linear-gradient(135deg, var(--c-navy-2), #3d4878); }
+    .scenario-head .sc-n { background: rgba(255,255,255,0.22); font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 6px; }
+    .scenario-head .sc-t { font-size: 13px; font-weight: 800; }
+    .scenario-body { padding: 16px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
+    .sc-gap { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+    .sc-gap.danger { color: var(--c-red); }
+    .sc-gap.warn { color: var(--c-amber); }
+    .sc-gap.info { color: var(--c-navy-2); }
+    .sc-gap small { font-size: 12px; color: var(--c-mute); font-weight: 600; margin-left: 4px; }
+    .sc-desc { font-size: 12px; color: #4a4a5e; line-height: 1.55; }
+    .sc-tagline { font-size: 11px; color: var(--c-mute); margin-top: auto; padding-top: 10px; border-top: 1px dashed var(--c-border); }
+
+    .judgement-box {
+      margin-top: 4px; background: var(--c-amber-soft); border: 1px solid #ffe2c2;
+      border-radius: 12px; padding: 16px 18px;
+    }
+    .judgement-box .jb-title { font-size: 12px; font-weight: 800; color: #c4710f; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+    .judgement-box .jb-text { font-size: 12.5px; color: #5a4a30; line-height: 1.6; }
+    .judgement-box .jb-text b { color: #a85d0a; }
+
+    /* 추천 옵션 카드 */
+    .option-card { border: 1px solid var(--c-border); border-radius: 14px; background: #fff; overflow: hidden; display: flex; flex-direction: column; box-shadow: var(--shadow-sm); }
+    .option-head { padding: 15px 18px; color: #fff; display: flex; align-items: center; gap: 10px; }
+    .option-head.opt1 { background: linear-gradient(135deg, var(--c-navy-2), #3d4878); }
+    .option-head.opt2 { background: linear-gradient(135deg, var(--c-green), #1c9c55); }
+    .option-head .opt-no { font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 5px; background: rgba(255,255,255,0.2); letter-spacing: 0.5px; }
+    .option-head .opt-name { font-size: 15px; font-weight: 800; }
+    .option-body { padding: 18px; flex: 1; display: flex; flex-direction: column; gap: 14px; }
+
+    .compose-row { display: grid; grid-template-columns: 70px 1fr; gap: 12px; align-items: start; }
+    .compose-term {
+      font-size: 11px; font-weight: 800; color: var(--c-navy-2); text-align: center;
+      background: var(--c-blue-soft); border-radius: 8px; padding: 8px 4px; line-height: 1.3;
+    }
+    .compose-row.total .compose-term { background: var(--c-amber-soft); color: #c4710f; }
+    .compose-desc { font-size: 12px; color: #4a4a5e; line-height: 1.5; }
+    .compose-desc .note { color: var(--c-mute); font-size: 11px; }
+
+    .sub-block { border-top: 1px solid #f0f0f5; padding-top: 12px; }
+    .sub-block .sb-title { font-size: 11px; font-weight: 800; color: var(--c-navy-2); margin-bottom: 7px; display: flex; align-items: center; gap: 6px; }
+    .quote {
+      font-size: 12px; color: #3d4878; line-height: 1.55; background: #f8f9fc;
+      border-left: 3px solid var(--c-blue); border-radius: 0 8px 8px 0; padding: 10px 12px;
+    }
+    .op-judge { font-size: 11.5px; color: #4a4a5e; line-height: 1.65; }
+    .op-judge .li { display: flex; gap: 7px; align-items: baseline; }
+    .op-judge .li::before { content: '•'; color: var(--c-blue); font-weight: 800; }
+    .op-judge .li.warn::before { color: var(--c-amber); }
+
+    .price-ref { display: flex; gap: 10px; }
+    .price-ref .pr-item { flex: 1; background: #f8f9fc; border: 1px solid var(--c-border); border-radius: 8px; padding: 10px 12px; text-align: center; }
+    .price-ref .pr-label { font-size: 10.5px; color: var(--c-mute); font-weight: 600; }
+    .price-ref .pr-val { font-size: 17px; font-weight: 800; color: var(--c-navy-2); margin-top: 3px; letter-spacing: -0.5px; }
+    .price-ref .pr-val small { font-size: 11px; color: var(--c-mute); font-weight: 600; }
+
+    /* 추가 확인 표 */
+    .check-table td .pill { margin-right: 4px; }
+
+    /* 결론 카드 */
+    .conclusion-card {
+      background: linear-gradient(135deg, var(--c-navy) 0%, var(--c-navy-2) 100%);
+      color: #fff; border-radius: 16px; padding: 24px 26px; box-shadow: var(--shadow-lg);
+    }
+    .conclusion-card h3 { font-size: 15px; font-weight: 800; border-bottom: 1px solid rgba(255,255,255,0.16); padding-bottom: 10px; margin-bottom: 14px; }
+    .conclusion-card ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .conclusion-card li { font-size: 12.5px; line-height: 1.55; padding-left: 18px; position: relative; opacity: 0.92; }
+    .conclusion-card li::before { content: '▸'; position: absolute; left: 0; color: var(--c-amber); font-weight: 800; }
+    .conclusion-summary { margin-top: 18px; background: rgba(255,255,255,0.08); border-radius: 10px; padding: 14px 16px; }
+    .conclusion-summary .cs-label { font-size: 10.5px; font-weight: 800; color: var(--c-amber); text-transform: uppercase; letter-spacing: 0.6px; }
+    .conclusion-summary .cs-text { font-size: 13px; font-weight: 700; line-height: 1.55; margin-top: 5px; }
+
+    .footer { text-align: center; padding: 20px; color: #9a9ab0; font-size: 11px; line-height: 1.6; }
+
+    @media (max-width: 920px) {
+      .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+      .header { flex-direction: column; align-items: flex-start; gap: 14px; }
+      .header .timestamp { text-align: left; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- 헤더 -->
+    <div class="header">
+      <div>
+        <h1>새로운 클래스 대기 기간 추천 프로그램 검토</h1>
+        <div class="subtitle">레벨 5-1기 종료 후 신규 클래스(2027.01.04)까지 · 대기 기간 연결 운영안</div>
+      </div>
+      <div class="timestamp">
+        <div class="big">2026-05-29</div>
+        <div>내부 보고용 · 검토 기준일</div>
+      </div>
+    </div>
+
+    <!-- 섹션 1: 핵심 요약 -->
+    <div class="section-label">핵심 요약</div>
+    <div class="grid-4">
+
+      <!-- ⑴ 미진행 시 공백 -->
+      <div class="summary-card is-danger">
+        <div class="summary-title">⑴ 미진행 시 대기 공백 <span class="tag danger">위험</span></div>
+        <div class="big-number danger">약 7<span class="unit">개월</span></div>
+        <div class="summary-sub">레벨 5-1기 <b>2026.06.05 종료</b> 후 아무 과정도 진행하지 않으면 신규 클래스(2027.01.04)까지 공백이 발생합니다.</div>
+        <div class="summary-foot">운동 습관 단절 → 이탈 위험 최대</div>
+      </div>
+
+      <!-- ⑵ 연결 프로그램 적용 시 -->
+      <div class="summary-card is-warn">
+        <div class="summary-title">⑵ 연결 적용 후 잔여 공백 <span class="tag warn">경계</span></div>
+        <div class="big-number warn">약 3<span class="unit">개월</span></div>
+        <div class="summary-sub">복습반+레벨 5-2기 재수강으로 <b>06.08~10.02(약 4개월)</b> 운동을 연결해도 10.02 이후 잔여 공백이 남습니다.</div>
+        <div class="summary-foot">4개월 구성 이후 유지 방식 추가 검토 필요</div>
+      </div>
+
+      <!-- ⑶ 추천 옵션 -->
+      <div class="summary-card">
+        <div class="summary-title">⑶ 추천 프로그램 <span class="tag info">2개 안</span></div>
+        <div class="summary-list">
+          <div class="li"><span class="dot" style="background:var(--c-navy-2)"></span><span><b>옵션 1.</b> 복습반 + 레벨 5 라이브 재수강형</span></div>
+          <div class="li"><span class="dot" style="background:var(--c-green)"></span><span><b>옵션 2.</b> 레벨 5 영상 자율 수행형</span></div>
+        </div>
+        <div class="summary-foot">라이브 참여 가능 여부·비용 부담에 따라 선택</div>
+      </div>
+
+      <!-- ⑷ 가격 근거 -->
+      <div class="summary-card">
+        <div class="summary-title">⑷ 가격 설정 근거 <span class="tag info">참고</span></div>
+        <div class="summary-sub" style="flex:0; margin-top:2px;">기존 레벨 5 재등록 금액 사례</div>
+        <div class="price-ref" style="margin-top:10px; flex:1; align-items:center;">
+          <div class="pr-item">
+            <div class="pr-label">레벨 4-1기</div>
+            <div class="pr-val">800,000<small>원</small></div>
+          </div>
+          <div class="pr-item">
+            <div class="pr-label">레벨 4-2기</div>
+            <div class="pr-val">870,000<small>원</small></div>
+          </div>
+        </div>
+        <div class="summary-foot">현실적 가격 설정 기준으로 활용 가능</div>
+      </div>
+    </div>
+
+    <!-- 섹션 2: 신규 클래스 및 연결 일정 -->
+    <div class="section-label">신규 클래스 및 연결 일정</div>
+    <div class="grid-1">
+      <div class="card">
+        <div class="card-title">📅 연결 일정 타임라인 <span class="badge">2026.06 ~ 2027.01</span></div>
+
+        <div class="timeline-strip">
+          <div class="tl-node">
+            <div class="tl-dot end"></div>
+            <div class="tl-date">06.05 <span style="font-weight:600;color:var(--c-mute);font-size:10px;">(금)</span></div>
+            <div class="tl-label">레벨 5-1기 종료</div>
+            <div class="tl-dday soon">D-7</div>
+            <div class="tl-note">신규 클래스 대기 대상</div>
+          </div>
+          <div class="tl-node">
+            <div class="tl-dot"></div>
+            <div class="tl-date">06.08 <span style="font-weight:600;color:var(--c-mute);font-size:10px;">(월)</span></div>
+            <div class="tl-label">1개월 복습반 시작</div>
+            <div class="tl-dday soon">D-10</div>
+            <div class="tl-note">종료 후 바로 연결</div>
+          </div>
+          <div class="tl-node">
+            <div class="tl-dot"></div>
+            <div class="tl-date">07.03 <span style="font-weight:600;color:var(--c-mute);font-size:10px;">(금)</span></div>
+            <div class="tl-label">1개월 복습반 종료</div>
+            <div class="tl-dday">D-35</div>
+            <div class="tl-note">4주 운영</div>
+          </div>
+          <div class="tl-node">
+            <div class="tl-dot rest"></div>
+            <div class="tl-date">07.04~07.12</div>
+            <div class="tl-label">휴식 기간</div>
+            <div class="tl-dday">1주</div>
+            <div class="tl-note">재정비</div>
+          </div>
+          <div class="tl-node">
+            <div class="tl-dot"></div>
+            <div class="tl-date">07.13 <span style="font-weight:600;color:var(--c-mute);font-size:10px;">(월)</span></div>
+            <div class="tl-label">레벨 5-2기 시작</div>
+            <div class="tl-dday">D-45</div>
+            <div class="tl-note">라이브 재수강 연결</div>
+          </div>
+          <div class="tl-node">
+            <div class="tl-dot end"></div>
+            <div class="tl-date">10.02 <span style="font-weight:600;color:var(--c-mute);font-size:10px;">(금)</span></div>
+            <div class="tl-label">레벨 5-2기 종료</div>
+            <div class="tl-dday">D-126</div>
+            <div class="tl-note">12주 과정 종료</div>
+          </div>
+          <div class="tl-node">
+            <div class="tl-dot launch"></div>
+            <div class="tl-date">'27.01.04 <span style="font-weight:600;color:var(--c-mute);font-size:10px;">(월)</span></div>
+            <div class="tl-label">새로운 클래스 시작</div>
+            <div class="tl-dday">D-220</div>
+            <div class="tl-note">신규 컨셉 런칭 예정</div>
+          </div>
+        </div>
+
+        <table style="margin-top: 18px;">
+          <thead>
+            <tr>
+              <th style="width:30%;">구분</th>
+              <th style="width:28%;">일정</th>
+              <th>비고</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>레벨 5-1기 종료</b></td>
+              <td>2026.06.05 (금)</td>
+              <td>신규 클래스 대기 대상</td>
+            </tr>
+            <tr>
+              <td><b>1개월 복습반 시작</b></td>
+              <td>2026.06.08 (월)</td>
+              <td>레벨 5-1기 종료 후 바로 연결</td>
+            </tr>
+            <tr>
+              <td><b>1개월 복습반 종료</b></td>
+              <td>2026.07.03 (금)</td>
+              <td><span class="pill blue">4주 운영</span></td>
+            </tr>
+            <tr>
+              <td><b>휴식 기간</b></td>
+              <td>2026.07.04 ~ 07.12</td>
+              <td><span class="pill gray">1주 휴식</span></td>
+            </tr>
+            <tr>
+              <td><b>레벨 5-2기 시작</b></td>
+              <td>2026.07.13 (월)</td>
+              <td>라이브 재수강 연결 가능</td>
+            </tr>
+            <tr>
+              <td><b>레벨 5-2기 종료</b></td>
+              <td>2026.10.02 (금)</td>
+              <td><span class="pill blue">12주 과정 종료</span></td>
+            </tr>
+            <tr>
+              <td><b>새로운 클래스 시작</b></td>
+              <td>2027.01.04 (월)</td>
+              <td><span class="pill green">신규 컨셉 클래스 런칭 예정</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 섹션 3: 대기 기간 시나리오 비교 -->
+    <div class="section-label">대기 기간 확인 — 시나리오별 공백</div>
+    <div class="grid-3">
+
+      <div class="scenario">
+        <div class="scenario-head danger">
+          <span class="sc-n">CASE A</span>
+          <span class="sc-t">아무 과정 미진행</span>
+        </div>
+        <div class="scenario-body">
+          <div class="sc-gap danger">약 7개월 <small>공백</small></div>
+          <div class="sc-desc">2026.06.05 종료 후 바로 대기 상태로 들어가, 신규 클래스 시작까지 운동 연결이 없습니다.</div>
+          <div class="sc-tagline">레벨 5-1기 회원이 아무것도 진행하지 않는 경우</div>
+        </div>
+      </div>
+
+      <div class="scenario">
+        <div class="scenario-head warn">
+          <span class="sc-n">CASE B</span>
+          <span class="sc-t">복습반 + 5-2기 재수강</span>
+        </div>
+        <div class="scenario-body">
+          <div class="sc-gap warn">약 3개월 <small>잔여 공백</small></div>
+          <div class="sc-desc">2026.06.08 ~ 10.02까지 운동을 연결하지만, 10.02 이후 신규 클래스까지 공백이 남습니다.</div>
+          <div class="sc-tagline">복습반 + 레벨 5-2기 재수강을 진행하는 경우</div>
+        </div>
+      </div>
+
+      <div class="scenario">
+        <div class="scenario-head info">
+          <span class="sc-n">CASE C</span>
+          <span class="sc-t">영상 수강권 선택</span>
+        </div>
+        <div class="scenario-body">
+          <div class="sc-gap info">운영 기간 <small>확정 필요</small></div>
+          <div class="sc-desc">영상 수강권 시작일·종료일을 어떻게 배치하느냐에 따라 잔여 공백이 달라져, 별도 확인이 필요합니다.</div>
+          <div class="sc-tagline">영상 수강권을 선택하는 경우</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-1">
+      <div class="judgement-box">
+        <div class="jb-title">⚠️ 현재 판단</div>
+        <div class="jb-text">
+          옵션 1을 선택하더라도 레벨 5-2기가 종료되는 <b>10월 2일</b>부터 새로운 클래스 시작일인 <b>2027년 1월 4일</b>까지
+          약 <b>3개월의 추가 공백</b>이 남습니다. 따라서 옵션 1은 <b>4개월 구성 이후</b>, 신규 클래스 시작 전까지
+          어떤 방식으로 회원을 유지할지 <b>추가 검토가 필요</b>합니다.
+        </div>
+      </div>
+    </div>
+
+    <!-- 섹션 4: 추천 프로그램 옵션 -->
+    <div class="section-label">추천 프로그램 옵션</div>
+    <div class="grid-2">
+
+      <!-- 옵션 1 -->
+      <div class="option-card">
+        <div class="option-head opt1">
+          <span class="opt-no">OPTION 1</span>
+          <span class="opt-name">복습반 + 레벨 5 라이브 재수강형</span>
+        </div>
+        <div class="option-body">
+          <div>
+            <div class="compose-row">
+              <div class="compose-term">1개월</div>
+              <div class="compose-desc">레벨 3·4 코치 추천 12주 프로그램 라이브 수강권 제공<br><span class="note">복습반 형태 / <b>서비스 제공</b></span></div>
+            </div>
+            <div class="compose-row" style="margin-top:10px;">
+              <div class="compose-term">3개월</div>
+              <div class="compose-desc">레벨 5-2기 라이브 수강권 + 영상 수강권<br><span class="note">실시간 수업 참여 및 반복 복습 가능</span></div>
+            </div>
+            <div class="compose-row total" style="margin-top:10px;">
+              <div class="compose-term">총 4개월</div>
+              <div class="compose-desc">유채코치 스페셜 영상 제공<br><span class="note">4개월간 제공</span></div>
+            </div>
+          </div>
+
+          <div class="sub-block">
+            <div class="sb-title">🗓️ 일정</div>
+            <table style="font-size:11.5px;">
+              <tbody>
+                <tr><td style="width:45%;"><b>1개월 복습반</b></td><td>2026.06.08 ~ 07.03</td></tr>
+                <tr><td><b>1주 휴식</b></td><td>2026.07.04 ~ 07.12</td></tr>
+                <tr><td><b>레벨 5-2기 라이브 재수강</b></td><td>2026.07.13 ~ 10.02</td></tr>
+                <tr><td><b>신규 클래스 시작</b></td><td>2027.01.04</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="sub-block">
+            <div class="sb-title">💰 기존 재등록 금액 참고</div>
+            <div class="price-ref">
+              <div class="pr-item"><div class="pr-label">레벨 4-1기</div><div class="pr-val">800,000<small>원</small></div></div>
+              <div class="pr-item"><div class="pr-label">레벨 4-2기</div><div class="pr-val">870,000<small>원</small></div></div>
+            </div>
+          </div>
+
+          <div class="sub-block">
+            <div class="sb-title">👍 추천 대상</div>
+            <div class="quote">레벨 5를 한 번 더 라이브로 함께 진행하며, 동작 완성도와 체력을 제대로 끌어올리고 싶은 분들께 추천드립니다.</div>
+          </div>
+
+          <div class="sub-block">
+            <div class="sb-title">🧭 운영 판단</div>
+            <div class="op-judge">
+              <div class="li">라이브 참여가 가능하고, 코치와 함께 꾸준히 운동 강도를 이어가고 싶은 회원에게 적합</div>
+              <div class="li">기존 재등록 금액 사례가 있어 현실적인 가격 설정 기준으로 활용 가능</div>
+              <div class="li warn">단, 레벨 5-2기 종료 후 신규 클래스까지 약 3개월이 남아 해당 기간 추가 영상 제공·유지 관리 방식 검토 필요</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 옵션 2 -->
+      <div class="option-card">
+        <div class="option-head opt2">
+          <span class="opt-no">OPTION 2</span>
+          <span class="opt-name">레벨 5 영상 자율 수행형</span>
+        </div>
+        <div class="option-body">
+          <div>
+            <div class="compose-row">
+              <div class="compose-term">3개월</div>
+              <div class="compose-desc">레벨 5 영상 수강권<br><span class="note">자율적으로 루틴 수행</span></div>
+            </div>
+            <div class="compose-row" style="margin-top:10px;">
+              <div class="compose-term">3개월</div>
+              <div class="compose-desc">유채코치 스페셜 영상 제공<br><span class="note">운동 감각 유지 목적</span></div>
+            </div>
+          </div>
+
+          <div class="sub-block">
+            <div class="sb-title">👍 추천 대상</div>
+            <div class="quote">라이브 재수강은 부담스럽지만, 혼자서 루틴과 운동 영상을 받아 자율적으로 운동 감각을 유지하고 싶은 분들께 추천드립니다.</div>
+          </div>
+
+          <div class="sub-block">
+            <div class="sb-title">🧭 운영 판단</div>
+            <div class="op-judge">
+              <div class="li">라이브 일정 참여가 어렵거나 재수강 비용에 부담을 느끼는 회원에게 적합</div>
+              <div class="li">회원이 원하는 시간에 운동할 수 있어 진입 부담은 낮음</div>
+              <div class="li warn">다만 라이브형보다 수행 관리·지속 참여율이 낮아질 수 있어 인증 또는 월별 체크 방식 포함 여부 검토 필요</div>
+            </div>
+          </div>
+
+          <div class="sub-block" style="margin-top:auto;">
+            <div class="sb-title" style="color:#c4710f;">⚠️ 추가 확인 필요</div>
+            <div class="op-judge" style="color:var(--c-mute);">
+              현재 <b>3개월 제공 기준</b>만 정리된 상태로, 운영 기간 배치 방식 확정이 필요합니다. (아래 섹션 참조)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 섹션 5: 추가 확인 필요사항 -->
+    <div class="section-label">추가 확인 필요사항 — 옵션 2 운영 방식</div>
+    <div class="grid-1">
+      <div class="card">
+        <div class="card-title">🔎 옵션 2 운영 기간 배치 검토 <span class="badge">3개월 제공 기준</span></div>
+        <table class="check-table" style="margin-top:6px;">
+          <thead>
+            <tr>
+              <th style="width:26%;">운영 방식</th>
+              <th style="width:28%;">기간 예시</th>
+              <th>확인 필요 내용</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>종료 직후 바로 제공</b></td>
+              <td>2026.06.08 ~ 09.04 전후</td>
+              <td>이후 신규 클래스까지 <span class="pill" style="background:var(--c-red-soft);color:var(--c-red);">약 4개월 공백</span> 발생</td>
+            </tr>
+            <tr>
+              <td><b>복습반 이후 제공</b></td>
+              <td>2026.07.13 ~ 10.02 전후</td>
+              <td>옵션 1과 동일하게 이후 <span class="pill" style="background:var(--c-amber-soft);color:#c4710f;">약 3개월 공백</span> 발생</td>
+            </tr>
+            <tr>
+              <td><b>신규 클래스 직전까지 이어지도록 배치</b></td>
+              <td>별도 산정 필요</td>
+              <td><span class="pill green">공백 최소화</span> 가능 여부 검토</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 섹션 6: 결론 -->
+    <div class="section-label">의사결정 검토 결론</div>
+    <div class="grid-1">
+      <div class="conclusion-card">
+        <h3>운영 목적 및 핵심 검토 사항</h3>
+        <ul>
+          <li>레벨 5 종료 후 신규 클래스(2027.01.04)까지 공백이 발생하므로, 회원의 운동 습관이 끊기지 않도록 연결 프로그램 제안이 필요합니다.</li>
+          <li>특히 레벨 5-1기 회원은 6월 5일 종료 후 약 7개월의 대기 기간이 생겨, 재수강 또는 영상 기반 유지 프로그램을 함께 제안해야 합니다.</li>
+          <li>옵션 1(라이브 재수강형)은 4개월 연결이 가능하나, 10.02 이후 약 3개월 잔여 공백에 대한 유지 방식 검토가 추가로 필요합니다.</li>
+          <li>옵션 2(영상 자율형)는 운영 기간 배치 방식(3가지)에 따라 잔여 공백이 달라지므로 확정이 필요합니다.</li>
+        </ul>
+        <div class="conclusion-summary">
+          <div class="cs-label">한 줄 요약</div>
+          <div class="cs-text">라이브 참여·비용 부담에 따라 옵션 1·2를 제시하되, 두 안 모두 레벨 5-2기 종료(10.02) 이후 신규 클래스(2027.01.04)까지의 잔여 공백을 메울 유지 방식을 함께 확정해야 함.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 푸터 -->
+    <div class="footer">
+      새로운 클래스 대기 기간 추천 프로그램 검토 · 내부 보고용<br>
+      검토 기준일 2026-05-29 · 원문 보고서 기반 구성
+    </div>
+  </div>
+</body>
+
+</html>
