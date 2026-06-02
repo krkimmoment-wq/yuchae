@@ -554,7 +554,9 @@
                 <th style="width: 110px;">날짜</th>
                 <th style="width: 60px;">요일</th>
                 <th style="width: 100px;">담당 코치</th>
-                <th style="width: 130px;">담당 조</th>
+                <th style="width: 80px;">레벨</th>
+                <th style="width: 80px;">기수</th>
+                <th style="width: 110px;">상세/조</th>
                 <th style="width: 320px;">오늘 단톡 주제</th>
                 <th style="width: 90px;">단톡 업로드</th>
                 <th style="width: 90px;">업로드 시간</th>
@@ -627,20 +629,20 @@
   // 지정된 9명의 코치 목록 (가나다 순)
   var coachesList = ['강민재', '김남곤', '박혜진', '성민경', '송희진', '이준석', '정유채', '조민정', '한서규'];
 
-  // 기본 월간 샘플 데이터셋 (2026년 6월 기준 일자별)
+  // 기본 월간 샘플 데이터셋 (2026년 6월 기준 일자별 - 레벨, 기수, 상세조 분리)
   var defaultMonthlyChecks = [
-    { id: 1, date: '2026-06-01', coach: '한서규', group: '1-13 2조', topic: '월요 운동 시작 챌린지', uploaded: true, uploadTime: '10:30', reaction: '긍정적', reactionCount: 5, reason: '', selfCheck: true, leaderConfirm: true },
-    { id: 2, date: '2026-06-01', coach: '송희진', group: '3-6 단톡방', topic: '무릎 통증 완화 스트레칭', uploaded: true, uploadTime: '14:15', reaction: '보통', reactionCount: 3, reason: '', selfCheck: true, leaderConfirm: true },
-    { id: 3, date: '2026-06-02', date_hint: '오늘', coach: '김남곤', group: '2-9 단톡방', topic: '8주차 눈바디 중간 인증 독려', uploaded: true, uploadTime: '09:20', reaction: '보통', reactionCount: 2, reason: '', selfCheck: true, leaderConfirm: false },
-    { id: 4, date: '2026-06-02', date_hint: '오늘', coach: '한서규', group: '1-13 3조', topic: '인바디 제출 및 블랙요원 공지', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, reason: '업로드 예정', selfCheck: false, leaderConfirm: false },
-    { id: 5, date: '2026-06-02', date_hint: '오늘', coach: '정유채', group: '코칭 스터디방', topic: '카톡 실전 피드백 가이드 공지', uploaded: true, uploadTime: '11:00', reaction: '긍정적', reactionCount: 6, reason: '', selfCheck: true, leaderConfirm: true },
-    { id: 6, date: '2026-06-03', coach: '송희진', group: '3-6 단톡방', topic: '수요 식단 체크 및 대체식 제안', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, reason: '', selfCheck: false, leaderConfirm: false },
-    { id: 7, date: '2026-06-03', coach: '강민재', group: '2-10 사전방', topic: '사전 대기 기간 가이드 배포', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, reason: '', selfCheck: false, leaderConfirm: false },
-    { id: 8, date: '2026-06-04', coach: '김남곤', group: '2-9 단톡방', topic: '이탈 위험 회원 개별 소통 점검', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, reason: '', selfCheck: false, leaderConfirm: false },
-    { id: 9, date: '2026-06-04', coach: '박혜진', group: '1-13 1조', topic: '1조 라이브 참여 회복 챌린지', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, reason: '', selfCheck: false, leaderConfirm: false },
-    { id: 10, date: '2026-06-05', coach: '이준석', group: '1-13 소통방', topic: '첫 주차 회원 동작 미션 안내', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, reason: '', selfCheck: false, leaderConfirm: false },
-    { date: '2026-06-05', coach: '조민정', group: '2-10 사전방', topic: '인바디 사전 수집 독려', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, reason: '', selfCheck: false, leaderConfirm: false },
-    { date: '2026-06-05', coach: '성민경', group: '3-6 단톡방', topic: '단톡방 지목형 챌린지 1회차 오픈', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, reason: '', selfCheck: false, leaderConfirm: false }
+    { id: 1, date: '2026-06-01', coach: '한서규', level: '1', cohort: '13', groupDetail: '2조', topic: '월요 운동 시작 챌린지', uploaded: true, uploadTime: '10:30', reaction: '긍정적', reactionCount: 5, reason: '', selfCheck: true, leaderConfirm: true },
+    { id: 2, date: '2026-06-01', coach: '송희진', level: '3', cohort: '6', groupDetail: '단톡방', topic: '무릎 통증 완화 스트레칭', uploaded: true, uploadTime: '14:15', reaction: '보통', reactionCount: 3, reason: '', selfCheck: true, leaderConfirm: true },
+    { id: 3, date: '2026-06-02', date_hint: '오늘', coach: '김남곤', level: '2', cohort: '9', groupDetail: '단톡방', topic: '8주차 눈바디 중간 인증 독려', uploaded: true, uploadTime: '09:20', reaction: '보통', reactionCount: 2, reason: '', selfCheck: true, leaderConfirm: false },
+    { id: 4, date: '2026-06-02', date_hint: '오늘', coach: '한서규', level: '1', cohort: '13', groupDetail: '3조', topic: '인바디 제출 및 블랙요원 공지', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, reason: '업로드 예정', selfCheck: false, leaderConfirm: false },
+    { id: 5, date: '2026-06-02', date_hint: '오늘', coach: '정유채', level: '', cohort: '', groupDetail: '코칭 스터디방', topic: '카톡 실전 피드백 가이드 공지', uploaded: true, uploadTime: '11:00', reaction: '긍정적', reactionCount: 6, reason: '', selfCheck: true, leaderConfirm: true },
+    { id: 6, date: '2026-06-03', coach: '송희진', level: '3', cohort: '6', groupDetail: '단톡방', topic: '수요 식단 체크 및 대체식 제안', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, reason: '', selfCheck: false, leaderConfirm: false },
+    { id: 7, date: '2026-06-03', coach: '강민재', level: '2', cohort: '10', groupDetail: '사전방', topic: '사전 대기 기간 가이드 배포', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, reason: '', selfCheck: false, leaderConfirm: false },
+    { id: 8, date: '2026-06-04', coach: '김남곤', level: '2', cohort: '9', groupDetail: '단톡방', topic: '이탈 위험 회원 개별 소통 점검', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, reason: '', selfCheck: false, leaderConfirm: false },
+    { id: 9, date: '2026-06-04', coach: '박혜진', level: '1', cohort: '13', groupDetail: '1조', topic: '1조 라이브 참여 회복 챌린지', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, reason: '', selfCheck: false, leaderConfirm: false },
+    { id: 10, date: '2026-06-05', coach: '이준석', level: '1', cohort: '13', groupDetail: '소통방', topic: '첫 주차 회원 동작 미션 안내', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, reason: '', selfCheck: false, leaderConfirm: false },
+    { date: '2026-06-05', coach: '조민정', level: '2', cohort: '10', groupDetail: '사전방', topic: '인바디 사전 수집 독려', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, reason: '', selfCheck: false, leaderConfirm: false },
+    { date: '2026-06-05', coach: '성민경', level: '3', cohort: '6', groupDetail: '단톡방', topic: '단톡방 지목형 챌린지 1회차 오픈', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, reason: '', selfCheck: false, leaderConfirm: false }
   ];
 
   // 샘플 데이터에 고유 ID 보장
@@ -658,7 +660,44 @@
     var stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
       try {
-        gcChecks = JSON.parse(stored);
+        var parsed = JSON.parse(stored);
+        
+        // 기존 group 문자열 데이터 -> level, cohort, groupDetail 분리 마이그레이션 지원
+        gcChecks = parsed.map(function(item) {
+          if (item.group !== undefined && (item.level === undefined || item.cohort === undefined)) {
+            var level = '';
+            var cohort = '';
+            var groupDetail = item.group;
+            
+            // '1-13 2조' 형태 매칭 시도
+            var match = item.group.match(/^(\d+)-(\d+)(.*)$/);
+            if (match) {
+              level = match[1];
+              cohort = match[2];
+              groupDetail = match[3].trim();
+            } else {
+              // '3-6 단톡방' 매칭 시도
+              var matchSpace = item.group.match(/^(\d+)-(\d+)\s+(.*)$/);
+              if (matchSpace) {
+                level = matchSpace[1];
+                cohort = matchSpace[2];
+                groupDetail = matchSpace[3].trim();
+              }
+            }
+            item.level = level;
+            item.cohort = cohort;
+            item.groupDetail = groupDetail;
+            delete item.group;
+          }
+          
+          // 새로 추가된 필드 기본값 보장
+          if (item.level === undefined) item.level = '';
+          if (item.cohort === undefined) item.cohort = '';
+          if (item.groupDetail === undefined) item.groupDetail = '';
+          
+          return item;
+        });
+        saveData();
       } catch(e) {
         console.error("Failed to parse stored gcChecks, fallback to defaults.", e);
         gcChecks = JSON.parse(JSON.stringify(defaultMonthlyChecks));
@@ -710,7 +749,9 @@
       id: newId,
       date: todayStr,
       coach: coachesList[0],
-      group: '',
+      level: '1',
+      cohort: '13',
+      groupDetail: '',
       topic: '',
       uploaded: false,
       uploadTime: '',
@@ -796,6 +837,22 @@
         return '<option value="' + c + '"' + (item.coach === c ? ' selected' : '') + '>' + c + '</option>';
       }).join('');
 
+      // 레벨 옵션 생성
+      var levelOptions = ['', '1', '2', '3', '4', '5'].map(function(l) {
+        var label = l === '' ? '선택' : 'L' + l;
+        return '<option value="' + l + '"' + (item.level === l ? ' selected' : '') + '>' + label + '</option>';
+      }).join('');
+
+      // 기수 옵션 생성
+      var cohortOptionsArr = [''];
+      for (var i = 1; i <= 20; i++) {
+        cohortOptionsArr.push(String(i));
+      }
+      var cohortOptions = cohortOptionsArr.map(function(c) {
+        var label = c === '' ? '선택' : c + '기';
+        return '<option value="' + c + '"' + (item.cohort === c ? ' selected' : '') + '>' + label + '</option>';
+      }).join('');
+
       // 반응 옵션 생성
       var reactionOptions = ['', '긍정적', '보통', '소극적'].map(function(r) {
         return '<option value="' + r + '"' + (item.reaction === r ? ' selected' : '') + '>' + (r || '선택') + '</option>';
@@ -805,7 +862,9 @@
         '<td><input type="date" class="sheet-input" value="' + (item.date || '') + '" onchange="updateGroupChatField(' + item.id + ', \'date\', this.value)"></td>',
         '<td style="font-weight:700; color:var(--c-mute);">' + dayOfWeek + '</td>',
         '<td><select class="sheet-select" style="font-weight:700;" onchange="updateGroupChatField(' + item.id + ', \'coach\', this.value)">' + coachOptions + '</select></td>',
-        '<td><input type="text" class="sheet-input" value="' + (item.group || '') + '" placeholder="조/단톡방" onchange="updateGroupChatField(' + item.id + ', \'group\', this.value)"></td>',
+        '<td><select class="sheet-select" style="font-weight:700;" onchange="updateGroupChatField(' + item.id + ', \'level\', this.value)">' + levelOptions + '</select></td>',
+        '<td><select class="sheet-select" style="font-weight:700;" onchange="updateGroupChatField(' + item.id + ', \'cohort\', this.value)">' + cohortOptions + '</select></td>',
+        '<td><input type="text" class="sheet-input" value="' + (item.groupDetail || '') + '" placeholder="예: 2조, 사전방" onchange="updateGroupChatField(' + item.id + ', \'groupDetail\', this.value)"></td>',
         '<td><input type="text" class="sheet-input" style="text-align: left;" value="' + (item.topic || '') + '" placeholder="오늘의 단톡 주제 입력" onchange="updateGroupChatField(' + item.id + ', \'topic\', this.value)"></td>',
         '<td><input type="checkbox" class="sheet-checkbox" ' + (item.uploaded ? 'checked' : '') + ' onchange="updateGroupChatField(' + item.id + ', \'uploaded\', this.checked)"></td>',
         '<td><input type="text" class="sheet-input" value="' + (item.uploadTime || '') + '" placeholder="시간" onchange="updateGroupChatField(' + item.id + ', \'uploadTime\', this.value)"></td>',
