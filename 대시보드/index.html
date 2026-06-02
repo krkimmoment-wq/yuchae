@@ -632,6 +632,203 @@
       color: var(--c-mute);
     }
 
+    /* 단톡방 현황판 스타일 */
+    .sheet-card {
+      background: var(--c-card);
+      border: 1px solid var(--c-border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .sheet-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--c-navy-light);
+      margin-bottom: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sheet-stats {
+      font-size: 12px;
+      color: var(--c-mute);
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .sheet-stat-badge {
+      background: var(--c-blue-soft);
+      color: var(--c-blue);
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-weight: 700;
+    }
+
+    .sheet-stat-badge.success {
+      background: var(--c-green-soft);
+      color: var(--c-green);
+    }
+
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      margin-top: 14px;
+      border: 1px solid var(--c-border);
+      border-radius: 12px;
+    }
+
+    .sheet-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      min-width: 1100px;
+    }
+
+    .sheet-table th {
+      background: #f8fafc;
+      padding: 10px 8px;
+      font-weight: 700;
+      color: var(--c-navy-light);
+      border-bottom: 2px solid #e2e8f0;
+      text-align: center;
+      vertical-align: middle;
+      font-size: 11.5px;
+    }
+
+    .sheet-table td {
+      padding: 8px 6px;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: middle;
+      text-align: center;
+    }
+
+    .sheet-table tr:hover {
+      background-color: #f8fafc;
+    }
+
+    .sheet-input {
+      width: 100%;
+      border: 1px solid transparent;
+      background: transparent;
+      padding: 6px 8px;
+      font-size: 12px;
+      font-family: inherit;
+      text-align: center;
+      transition: var(--transition);
+      border-radius: 6px;
+      color: var(--c-text);
+    }
+
+    .sheet-input:hover {
+      background: #f1f5f9;
+    }
+
+    .sheet-input:focus {
+      background: #fff;
+      border-color: var(--c-blue-border);
+      box-shadow: 0 0 0 2px var(--c-blue-soft);
+      outline: none;
+    }
+
+    .sheet-select {
+      border: 1px solid transparent;
+      background: transparent;
+      padding: 6px;
+      font-size: 12px;
+      font-family: inherit;
+      text-align: center;
+      transition: var(--transition);
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--c-text);
+    }
+
+    .sheet-select:hover {
+      background: #f1f5f9;
+    }
+
+    .sheet-select:focus {
+      background: #fff;
+      border-color: var(--c-blue-border);
+      outline: none;
+    }
+
+    .sheet-checkbox {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      accent-color: var(--c-blue);
+      vertical-align: middle;
+    }
+
+    .status-badge {
+      display: inline-block;
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-align: center;
+      width: 70px;
+    }
+
+    .status-badge.completed {
+      background: var(--c-green-soft);
+      color: var(--c-green);
+      border: 1px solid var(--c-green-border);
+    }
+
+    .status-badge.progressing {
+      background: var(--c-amber-soft);
+      color: var(--c-amber);
+      border: 1px solid var(--c-amber-border);
+    }
+
+    .status-badge.pending {
+      background: var(--c-red-soft);
+      color: var(--c-red);
+      border: 1px solid #fecaca;
+    }
+
+    .sheet-action-btn {
+      padding: 5px 10px;
+      border: 1px solid var(--c-border);
+      background: #fff;
+      border-radius: 6px;
+      font-size: 11.5px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transition);
+      color: var(--c-mute);
+    }
+
+    .sheet-action-btn:hover {
+      background: var(--c-blue-soft);
+      color: var(--c-blue);
+      border-color: var(--c-blue-border);
+    }
+
+    .sheet-del-btn {
+      background: none;
+      border: none;
+      color: var(--c-mute-light);
+      cursor: pointer;
+      font-size: 13px;
+      padding: 4px;
+      transition: var(--transition);
+    }
+
+    .sheet-del-btn:hover {
+      color: var(--c-red);
+    }
+
+
     /* 모바일 대응 */
     @media (max-width: 1024px) {
       .grid-4 { grid-template-columns: repeat(2, 1fr); }
@@ -827,6 +1024,54 @@
 
   </div>
 
+  <!-- 📢 단톡방 활성화 퇴근 전 셀프 체크 현황판 -->
+  <div class="grid-1">
+    <div class="card sheet-card">
+      <div class="sheet-title">
+        <span>📢 코치진 단톡방 활성화 - 퇴근 전 셀프 체크 현황판</span>
+        <div class="sheet-stats">
+          <span>오늘 실행률: <b id="todayExecRate" class="sheet-stat-badge">0%</b></span>
+          <span>주간 체크율: <b id="weeklyCheckRate" class="sheet-stat-badge success">0%</b></span>
+          <button class="sheet-action-btn" onclick="resetGroupChatSheet()" style="margin-left: 10px;">기본값 재설정</button>
+        </div>
+      </div>
+      <div style="font-size:12.5px; color:var(--c-mute); margin-bottom:12px; line-height: 1.5;">
+        코치진이 퇴근 전 스스로 오늘 해야 할 단톡방 메시지를 올렸는지 셀프 체크하여 의무적 소통을 습관화하기 위한 현황판입니다.<br>
+        <span style="color:var(--c-blue); font-weight:700;">💡 각 셀의 텍스트나 체크박스를 변경하면 실시간으로 저장 및 실행 상태가 업데이트됩니다.</span>
+      </div>
+      
+      <div class="table-container">
+        <table class="sheet-table">
+          <thead>
+            <tr>
+              <th style="width: 85px;">요일</th>
+              <th style="width: 105px;">담당 코치</th>
+              <th style="width: 110px;">담당 조</th>
+              <th>오늘 단톡 주제</th>
+              <th style="width: 90px;">단톡 업로드</th>
+              <th style="width: 90px;">업로드 시간</th>
+              <th style="width: 95px;">회원 반응</th>
+              <th style="width: 85px;">반응 건수</th>
+              <th>단톡 활용 사례</th>
+              <th>미진행 사유</th>
+              <th style="width: 105px;">퇴근 전 셀프체크</th>
+              <th style="width: 95px;">팀장 확인</th>
+              <th style="width: 105px;">실행 상태</th>
+              <th style="width: 40px;"></th>
+            </tr>
+          </thead>
+          <tbody id="sheetBody">
+            <!-- JS로 동적 렌더링 -->
+          </tbody>
+        </table>
+      </div>
+      
+      <div style="margin-top: 14px; text-align: right;">
+        <button class="checklist-btn" onclick="addNewGroupChatRow()">+ 현황판 행 추가</button>
+      </div>
+    </div>
+  </div>
+
   <!-- 하단 섹션: 의사결정 보고 결론 및 핵심 한줄 요약 -->
   <div class="grid-1">
     <div class="card ceo-card">
@@ -1017,6 +1262,154 @@
   // 초기 로드
   initData();
   renderChecklist();
+
+  // =========================================================================
+  // 📢 단톡방 활성화 퇴근 전 셀프 체크 현황판 Logic
+  // =========================================================================
+  var defaultGroupChatChecks = [
+    { id: 1, day: '월요일', coach: '서규', group: '13기 2조', topic: '월요 운동 시작 챌린지', uploaded: true, uploadTime: '10:30', reaction: '긍정적', reactionCount: 5, caseDetail: '스쿼트 자세 질문 피드백 연계', reason: '', selfCheck: true, leaderConfirm: true },
+    { id: 2, day: '월요일', coach: '희진', group: '3-6기 단톡방', topic: '무릎 통증 완화 스트레칭', uploaded: true, uploadTime: '14:15', reaction: '보통', reactionCount: 3, caseDetail: '통증 호소 회원 개별 상담 전환', reason: '', selfCheck: true, leaderConfirm: true },
+    { id: 3, day: '화요일', coach: '남곤', group: '2-9기 단톡방', topic: '8주차 눈바디 중간 인증 독려', uploaded: true, uploadTime: '09:20', reaction: '보통', reactionCount: 2, caseDetail: '눈바디 예시 사진 업로드', reason: '', selfCheck: true, leaderConfirm: false },
+    { id: 4, day: '화요일', coach: '서규', group: '13기 3조', topic: '인바디 제출 및 블랙요원 공지', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, caseDetail: '', reason: '업로드 예정', selfCheck: false, leaderConfirm: false },
+    { id: 5, day: '수요일', coach: '희진', group: '3-6기 단톡방', topic: '수요 식단 체크 및 대체식 제안', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, caseDetail: '', reason: '', selfCheck: false, leaderConfirm: false },
+    { id: 6, day: '목요일', coach: '남곤', group: '2-10기 사전방', topic: '시작 전 인바디 측정 가이드', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, caseDetail: '', reason: '', selfCheck: false, leaderConfirm: false },
+    { id: 7, day: '금요일', coach: '서규', group: '13기 2조', topic: '주말 식단 및 운동 유지 가이드', uploaded: false, uploadTime: '', reaction: '', reactionCount: 0, caseDetail: '', reason: '', selfCheck: false, leaderConfirm: false }
+  ];
+
+  var gcChecks = [];
+
+  function initGroupChatData() {
+    var stored = localStorage.getItem('op_group_chat_checks_260602');
+    if (stored) {
+      try {
+        gcChecks = JSON.parse(stored);
+      } catch(e) {
+        console.error("Failed to parse stored gcChecks, fallback to defaults.", e);
+        gcChecks = JSON.parse(JSON.stringify(defaultGroupChatChecks));
+      }
+    } else {
+      gcChecks = JSON.parse(JSON.stringify(defaultGroupChatChecks));
+      saveGroupChatData();
+    }
+  }
+
+  function saveGroupChatData() {
+    localStorage.setItem('op_group_chat_checks_260602', JSON.stringify(gcChecks));
+  }
+
+  function updateGroupChatField(id, field, val) {
+    gcChecks = gcChecks.map(function(item) {
+      if (item.id === id) {
+        var updated = Object.assign({}, item);
+        updated[field] = val;
+        return updated;
+      }
+      return item;
+    });
+    saveGroupChatData();
+    renderGroupChatSheet();
+  }
+
+  function addNewGroupChatRow() {
+    var newId = gcChecks.length > 0 ? Math.max.apply(null, gcChecks.map(function(item) { return item.id; })) + 1 : 1;
+    gcChecks.push({
+      id: newId,
+      day: '화요일',
+      coach: '서규',
+      group: '',
+      topic: '',
+      uploaded: false,
+      uploadTime: '',
+      reaction: '',
+      reactionCount: 0,
+      caseDetail: '',
+      reason: '',
+      selfCheck: false,
+      leaderConfirm: false
+    });
+    saveGroupChatData();
+    renderGroupChatSheet();
+  }
+
+  function deleteGroupChatRow(id) {
+    gcChecks = gcChecks.filter(function(item) { return item.id !== id; });
+    saveGroupChatData();
+    renderGroupChatSheet();
+  }
+
+  function resetGroupChatSheet() {
+    if (confirm("현황판 데이터를 기본값으로 재설정하시겠습니까? (이전 저장된 데이터는 삭제됩니다)")) {
+      gcChecks = JSON.parse(JSON.stringify(defaultGroupChatChecks));
+      saveGroupChatData();
+      renderGroupChatSheet();
+    }
+  }
+
+  function renderGroupChatSheet() {
+    var body = document.getElementById('sheetBody');
+    if (!body) return;
+    body.innerHTML = '';
+
+    gcChecks.forEach(function(item) {
+      var tr = document.createElement('tr');
+      
+      var statusClass = 'pending';
+      var statusText = '미진행';
+      if (item.uploaded && item.selfCheck) {
+        statusClass = 'completed';
+        statusText = '실행 완료';
+      } else if (item.uploaded || item.selfCheck) {
+        statusClass = 'progressing';
+        statusText = '진행 중';
+      }
+
+      var dayOptions = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'].map(function(d) {
+        return '<option value="' + d + '"' + (item.day === d ? ' selected' : '') + '>' + d + '</option>';
+      }).join('');
+
+      var coachOptions = ['서규', '희진', '남곤', '유채'].map(function(c) {
+        return '<option value="' + c + '"' + (item.coach === c ? ' selected' : '') + '>' + c + '</option>';
+      }).join('');
+
+      var reactionOptions = ['', '긍정적', '보통', '소극적'].map(function(r) {
+        return '<option value="' + r + '"' + (item.reaction === r ? ' selected' : '') + '>' + (r || '선택') + '</option>';
+      }).join('');
+
+      tr.innerHTML = [
+        '<td><select class="sheet-select" onchange="updateGroupChatField(' + item.id + ', \'day\', this.value)">' + dayOptions + '</select></td>',
+        '<td><select class="sheet-select" onchange="updateGroupChatField(' + item.id + ', \'coach\', this.value)">' + coachOptions + '</select></td>',
+        '<td><input type="text" class="sheet-input" value="' + (item.group || '') + '" placeholder="담당 조 입력" onchange="updateGroupChatField(' + item.id + ', \'group\', this.value)"></td>',
+        '<td><input type="text" class="sheet-input" style="text-align: left;" value="' + (item.topic || '') + '" placeholder="오늘의 단톡 주제 입력" onchange="updateGroupChatField(' + item.id + ', \'topic\', this.value)"></td>',
+        '<td><input type="checkbox" class="sheet-checkbox" ' + (item.uploaded ? 'checked' : '') + ' onchange="updateGroupChatField(' + item.id + ', \'uploaded\', this.checked)"></td>',
+        '<td><input type="text" class="sheet-input" value="' + (item.uploadTime || '') + '" placeholder="시간" onchange="updateGroupChatField(' + item.id + ', \'uploadTime\', this.value)"></td>',
+        '<td><select class="sheet-select" onchange="updateGroupChatField(' + item.id + ', \'reaction\', this.value)">' + reactionOptions + '</select></td>',
+        '<td><input type="number" class="sheet-input" style="width: 50px;" value="' + (item.reactionCount || 0) + '" onchange="updateGroupChatField(' + item.id + ', \'reactionCount\', parseInt(this.value) || 0)"></td>',
+        '<td><input type="text" class="sheet-input" style="text-align: left;" value="' + (item.caseDetail || '') + '" placeholder="사례 적기" onchange="updateGroupChatField(' + item.id + ', \'caseDetail\', this.value)"></td>',
+        '<td><input type="text" class="sheet-input" style="text-align: left;" value="' + (item.reason || '') + '" placeholder="사유 적기" onchange="updateGroupChatField(' + item.id + ', \'reason\', this.value)"></td>',
+        '<td><input type="checkbox" class="sheet-checkbox" ' + (item.selfCheck ? 'checked' : '') + ' onchange="updateGroupChatField(' + item.id + ', \'selfCheck\', this.checked)"></td>',
+        '<td><input type="checkbox" class="sheet-checkbox" ' + (item.leaderConfirm ? 'checked' : '') + ' onchange="updateGroupChatField(' + item.id + ', \'leaderConfirm\', this.checked)"></td>',
+        '<td><span class="status-badge ' + statusClass + '">' + statusText + '</span></td>',
+        '<td><button class="sheet-del-btn" onclick="deleteGroupChatRow(' + item.id + ')">✕</button></td>'
+      ].join('');
+
+      body.appendChild(tr);
+    });
+
+    var todayName = '화요일';
+    var todayTasks = gcChecks.filter(function(item) { return item.day === todayName; });
+    var todayCompleted = todayTasks.filter(function(item) { return item.uploaded && item.selfCheck; }).length;
+    var todayExecPercent = todayTasks.length > 0 ? Math.round((todayCompleted / todayTasks.length) * 100) : 0;
+
+    var totalTasks = gcChecks.length;
+    var totalCompleted = gcChecks.filter(function(item) { return item.uploaded && item.selfCheck; }).length;
+    var weeklyCheckPercent = totalTasks > 0 ? Math.round((totalCompleted / totalTasks) * 100) : 0;
+
+    document.getElementById('todayExecRate').innerText = todayExecPercent + '%';
+    document.getElementById('weeklyCheckRate').innerText = weeklyCheckPercent + '%';
+  }
+
+  initGroupChatData();
+  renderGroupChatSheet();
 </script>
 </body>
 </html>
