@@ -774,6 +774,15 @@
       .then(function(json) {
         if (!json || !json.ok) return false;
         var serverUpdatedAt = json.updatedAt || '';
+
+        // 시트가 한 번도 저장된 적 없음 (초기 빈 시트) + 클라이언트에 데이터 있음
+        // → 빈 데이터로 덮어쓰지 말고, 클라이언트 데이터를 시트에 초기화(seed)
+        if (!serverUpdatedAt && gcChecks.length > 0) {
+          setSyncStatus('busy', '⏳ 시트 초기화 중...', '시트가 비어있어 현재 데이터로 채웁니다');
+          pushToSheet();
+          return false;
+        }
+
         if (serverUpdatedAt && serverUpdatedAt === lastKnownUpdatedAt) {
           setSyncStatus('ok', '☁️ 동기화됨', '서버 갱신: ' + new Date(serverUpdatedAt).toLocaleTimeString());
           return false;
