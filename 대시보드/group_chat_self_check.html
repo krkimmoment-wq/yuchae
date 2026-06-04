@@ -148,6 +148,24 @@
       color: #fff;
     }
 
+    /* Google Sheets 동기화 상태 칩 */
+    .sync-chip {
+      background: rgba(255, 255, 255, 0.10);
+      border: 1px solid rgba(255, 255, 255, 0.20);
+      color: #cfd6e6;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: var(--transition);
+      cursor: help;
+    }
+    .sync-chip.ok   { background: rgba(16,185,129,0.18); border-color: rgba(16,185,129,0.40); color: #d1fae5; }
+    .sync-chip.busy { background: rgba(59,130,246,0.18); border-color: rgba(59,130,246,0.40); color: #dbeafe; }
+    .sync-chip.warn { background: rgba(245,158,11,0.18); border-color: rgba(245,158,11,0.40); color: #fde68a; }
+    .sync-chip.err  { background: rgba(239,68,68,0.18);  border-color: rgba(239,68,68,0.40);  color: #fecaca; }
+
     /* 레이아웃 분할 */
     .dashboard-grid {
       display: grid;
@@ -504,6 +522,7 @@
       </div>
     </div>
     <div class="header-meta">
+      <span class="sync-chip" id="syncChip" title="">☁️ 동기화 준비 중</span>
       <span class="month-selector-label">조회 월 선택</span>
       <select class="month-select" id="monthSelector" onchange="changeMonth()">
         <option value="2026-06">2026년 06월</option>
@@ -625,7 +644,7 @@
 
   <!-- 푸터 -->
   <div class="footer">
-    단톡방 활성화 일자별 셀프 체크인 시스템 · Antigravity AI Dashboard Engine V1.2 · LocalStorage 실시간 자동 연동
+    단톡방 활성화 일자별 셀프 체크인 시스템 · Antigravity AI Dashboard Engine V1.3 · Google Sheets 실시간 동기화
   </div>
 
 </div>
@@ -660,6 +679,125 @@
 
   // 로컬스토리지 키 설정
   var STORAGE_KEY = 'op_group_chat_checks_monthly_v1';
+
+  // ===== Google Sheets 동기화 설정 =====
+  // 1) Google Sheets 새로 만들기
+  // 2) 확장 프로그램 > Apps Script 에 옆 README의 Code.gs 내용 붙여넣기
+  // 3) 배포 > 새 배포 > 유형: 웹 앱 > 액세스 권한: 모든 사용자 (액세스 권한 없는 사용자 포함)
+  // 4) 발급된 /exec URL 을 아래 SYNC_URL 에 그대로 붙여넣기
+  var SYNC_URL = 'https://script.google.com/macros/s/AKfycbwsTFsGIaLNp7Z2bRiTt_T7AJoDthCA_2F_VrsMXvCeC1rWF99ViVkMrhE6WqQgGuUB/exec';
+
+  var POLL_INTERVAL_MS = 20000;     // 다른 기기 변경 확인 주기
+  var PUSH_DEBOUNCE_MS = 1500;      // 마지막 입력 후 N ms 뒤에 서버 저장
+  var IDLE_BEFORE_PULL_MS = 6000;   // 마지막 입력 후 N ms 지나야 서버 데이터로 덮어쓰기 (편집 중 보호)
+
+  var lastUserActionAt = 0;
+  var lastPushAt = 0;
+  var lastKnownUpdatedAt = '';
+  var pushTimer = null;
+  var syncChip = null;
+
+  function setSyncStatus(cls, text, titleStr) {
+    if (!syncChip) syncChip = document.getElementById('syncChip');
+    if (!syncChip) return;
+    syncChip.className = 'sync-chip ' + (cls || '');
+    syncChip.innerText = text;
+    if (titleStr !== undefined) syncChip.title = titleStr;
+  }
+
+  function normalizeItem(item) {
+    item = item || {};
+    return {
+      id: Number(item.id) || 0,
+      date: item.date || '',
+      coach: item.coach || '',
+      level: item.level == null ? '' : String(item.level),
+      cohort: item.cohort == null ? '' : String(item.cohort),
+      groupDetail: item.groupDetail || '',
+      topic: item.topic || '',
+      uploaded: item.uploaded === true || item.uploaded === 'TRUE' || item.uploaded === 'true',
+      uploadTime: item.uploadTime || '',
+      reaction: item.reaction || '',
+      reactionCount: Number(item.reactionCount) || 0,
+      reason: item.reason || '',
+      selfCheck: item.selfCheck === true || item.selfCheck === 'TRUE' || item.selfCheck === 'true',
+      leaderConfirm: item.leaderConfirm === true || item.leaderConfirm === 'TRUE' || item.leaderConfirm === 'true'
+    };
+  }
+
+  function saveLocalOnly() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(gcChecks));
+  }
+
+  function schedulePush() {
+    lastUserActionAt = Date.now();
+    if (!SYNC_URL) {
+      setSyncStatus('warn', '☁️ 동기화 OFF', 'SYNC_URL이 설정되지 않았습니다. 코드 상단을 확인하세요.');
+      return;
+    }
+    if (pushTimer) clearTimeout(pushTimer);
+    setSyncStatus('busy', '⏳ 저장 대기...', '');
+    pushTimer = setTimeout(pushToSheet, PUSH_DEBOUNCE_MS);
+  }
+
+  function pushToSheet() {
+    if (!SYNC_URL) return;
+    setSyncStatus('busy', '⏳ 동기화 중...', '');
+    fetch(SYNC_URL, {
+      method: 'POST',
+      // text/plain 사용: CORS preflight 회피 (Apps Script 호환)
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ data: gcChecks })
+    }).then(function(r) { return r.json(); })
+      .then(function(json) {
+        if (json && json.ok) {
+          lastPushAt = Date.now();
+          lastKnownUpdatedAt = json.updatedAt || '';
+          setSyncStatus('ok', '☁️ 동기화됨', '저장 시각: ' + new Date().toLocaleTimeString());
+        } else {
+          setSyncStatus('err', '⚠️ 저장 실패', (json && json.error) || '응답 형식 오류');
+        }
+      })
+      .catch(function(e) {
+        setSyncStatus('err', '⚠️ 오프라인', String(e && e.message || e));
+      });
+  }
+
+  function pullFromSheet(opts) {
+    opts = opts || {};
+    if (!SYNC_URL) return Promise.resolve(false);
+    if (!opts.force && (Date.now() - lastUserActionAt) < IDLE_BEFORE_PULL_MS) {
+      return Promise.resolve(false);
+    }
+    return fetch(SYNC_URL + '?ts=' + Date.now(), { method: 'GET' })
+      .then(function(r) { return r.json(); })
+      .then(function(json) {
+        if (!json || !json.ok) return false;
+        var serverUpdatedAt = json.updatedAt || '';
+        if (serverUpdatedAt && serverUpdatedAt === lastKnownUpdatedAt) {
+          setSyncStatus('ok', '☁️ 동기화됨', '서버 갱신: ' + new Date(serverUpdatedAt).toLocaleTimeString());
+          return false;
+        }
+        // 내가 방금 푸시한 직후라면 무시 (자기 데이터를 다시 받아 덮어쓰는 것 방지)
+        if (serverUpdatedAt && new Date(serverUpdatedAt).getTime() <= lastPushAt) return false;
+
+        if (Array.isArray(json.data)) {
+          gcChecks = json.data.map(normalizeItem);
+          saveLocalOnly();
+          sortChecks();
+          renderAll();
+          lastKnownUpdatedAt = serverUpdatedAt;
+          var when = serverUpdatedAt ? new Date(serverUpdatedAt).toLocaleTimeString() : '';
+          setSyncStatus('ok', '☁️ 동기화됨', '서버 갱신: ' + when);
+          return true;
+        }
+        return false;
+      })
+      .catch(function(e) {
+        setSyncStatus('err', '⚠️ 오프라인', String(e && e.message || e));
+        return false;
+      });
+  }
 
   function initData() {
     var stored = localStorage.getItem(STORAGE_KEY);
@@ -717,7 +855,8 @@
   }
 
   function saveData() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(gcChecks));
+    saveLocalOnly();
+    schedulePush();
   }
 
   // 날짜 기반 요일 문자열 자동 계산
@@ -953,6 +1092,17 @@
   initData();
   sortChecks();
   renderAll();
+
+  // ===== 동기화 부트 =====
+  syncChip = document.getElementById('syncChip');
+  if (SYNC_URL) {
+    setSyncStatus('busy', '⏳ 불러오는 중...', '서버에서 최신 데이터 가져오는 중');
+    pullFromSheet({ force: true }).then(function() {
+      setInterval(function() { pullFromSheet(); }, POLL_INTERVAL_MS);
+    });
+  } else {
+    setSyncStatus('warn', '☁️ 동기화 OFF', 'SYNC_URL을 설정하면 모든 기기에서 자동 동기화됩니다.');
+  }
 </script>
 </body>
 </html>
