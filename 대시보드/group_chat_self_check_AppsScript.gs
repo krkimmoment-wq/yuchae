@@ -46,6 +46,16 @@ function doGet(e) {
             obj[col] = (v === true || v === 'TRUE' || v === 'true');
           } else if (col === 'id' || col === 'reactionCount') {
             obj[col] = (v === '' || v === null) ? 0 : Number(v);
+          } else if (col === 'date') {
+            // 시트가 자동으로 Date 객체로 바꿔도 'YYYY-MM-DD'로 강제 변환
+            obj[col] = (v instanceof Date)
+              ? Utilities.formatDate(v, 'Asia/Seoul', 'yyyy-MM-dd')
+              : (v == null ? '' : String(v));
+          } else if (col === 'uploadTime') {
+            // 시간 셀(1899-12-30 기준 Date)을 'HH:mm'으로 강제 변환
+            obj[col] = (v instanceof Date)
+              ? Utilities.formatDate(v, 'Asia/Seoul', 'HH:mm')
+              : (v == null ? '' : String(v));
           } else {
             obj[col] = (v == null) ? '' : String(v);
           }
@@ -93,7 +103,10 @@ function doPost(e) {
           return (v === undefined || v === null) ? '' : v;
         });
       });
-      sh.getRange(2, 1, rows.length, COLUMNS.length).setValues(rows);
+      var dataRange = sh.getRange(2, 1, rows.length, COLUMNS.length);
+      // 시트의 자동 Date 변환을 막기 위해 데이터 영역을 텍스트 형식으로 강제
+      dataRange.setNumberFormat('@');
+      dataRange.setValues(rows);
     }
 
     var now = new Date().toISOString();
@@ -116,6 +129,23 @@ function getSheet_() {
     sh.setFrozenRows(1);
   }
   return sh;
+}
+
+/**
+ * 시트 초기화 유틸리티 — Apps Script 편집기에서 한 번 실행하면
+ * 데이터를 모두 지우고 셀 형식을 텍스트로 리셋합니다.
+ * (날짜/시간이 잘못 저장된 경우 사용)
+ */
+function resetSheet() {
+  var sh = getSheet_();
+  var maxRow = sh.getMaxRows();
+  if (maxRow > 1) {
+    sh.getRange(2, 1, maxRow - 1, COLUMNS.length).clearContent();
+    sh.getRange(2, 1, maxRow - 1, COLUMNS.length).setNumberFormat('@');
+  }
+  // 메타 시트의 updatedAt도 비워서 다음 풀 때 클라이언트 데이터로 seed되게 함
+  setMeta_('updatedAt', '');
+  Logger.log('시트 초기화 완료 — 데이터 영역 클리어 + 텍스트 형식 적용');
 }
 
 function getMetaSheet_() {
