@@ -688,8 +688,9 @@
   var SYNC_URL = 'https://script.google.com/macros/s/AKfycbwsTFsGIaLNp7Z2bRiTt_T7AJoDthCA_2F_VrsMXvCeC1rWF99ViVkMrhE6WqQgGuUB/exec';
 
   var POLL_INTERVAL_MS = 20000;     // 다른 기기 변경 확인 주기
-  var PUSH_DEBOUNCE_MS = 1500;      // 마지막 입력 후 N ms 뒤에 서버 저장
+  var PUSH_DEBOUNCE_MS = 600;       // 마지막 입력 후 N ms 뒤에 서버 저장
   var IDLE_BEFORE_PULL_MS = 6000;   // 마지막 입력 후 N ms 지나야 서버 데이터로 덮어쓰기 (편집 중 보호)
+  var LOCAL_CHANGED_KEY = STORAGE_KEY + '_changedAt';
 
   var lastUserActionAt = 0;
   var lastPushAt = 0;
@@ -729,6 +730,18 @@
     localStorage.setItem(STORAGE_KEY, JSON.stringify(gcChecks));
   }
 
+  function markLocalChanged() {
+    localStorage.setItem(LOCAL_CHANGED_KEY, new Date().toISOString());
+  }
+
+  function getLocalChangedAt() {
+    return localStorage.getItem(LOCAL_CHANGED_KEY) || '';
+  }
+
+  function clearLocalChanged() {
+    localStorage.removeItem(LOCAL_CHANGED_KEY);
+  }
+
   function schedulePush() {
     lastUserActionAt = Date.now();
     if (!SYNC_URL) {
@@ -753,6 +766,7 @@
         if (json && json.ok) {
           lastPushAt = Date.now();
           lastKnownUpdatedAt = json.updatedAt || '';
+          clearLocalChanged();
           setSyncStatus('ok', '☁️ 동기화됨', '저장 시각: ' + new Date().toLocaleTimeString());
         } else {
           setSyncStatus('err', '⚠️ 저장 실패', (json && json.error) || '응답 형식 오류');
@@ -774,6 +788,18 @@
       .then(function(json) {
         if (!json || !json.ok) return false;
         var serverUpdatedAt = json.updatedAt || '';
+        var localChangedAt = getLocalChangedAt();
+
+        // ★ 미저장 변경사항 보호: 로컬에 서버보다 새로운 변경이 있으면 절대 덮어쓰지 않고 푸시
+        //    (직전 세션에서 디바운스 안에 새로고침된 경우 데이터 손실 방지)
+        if (localChangedAt) {
+          var localNewer = !serverUpdatedAt || new Date(localChangedAt) > new Date(serverUpdatedAt);
+          if (localNewer) {
+            setSyncStatus('busy', '⏳ 미저장 변경 업로드 중...', '로컬에 서버보다 새 변경 있음 → 푸시');
+            pushToSheet();
+            return false;
+          }
+        }
 
         // 시트가 한 번도 저장된 적 없음 (초기 빈 시트) + 클라이언트에 데이터 있음
         // → 빈 데이터로 덮어쓰지 말고, 클라이언트 데이터를 시트에 초기화(seed)
@@ -865,8 +891,26 @@
 
   function saveData() {
     saveLocalOnly();
+    markLocalChanged();
     schedulePush();
   }
+
+  // 페이지 닫기/숨김 직전에 펜딩 푸시 강제 전송 (디바운스 안에서 새로고침 → 데이터 손실 방지)
+  function flushPendingPush() {
+    if (!SYNC_URL || !pushTimer) return;
+    clearTimeout(pushTimer);
+    pushTimer = null;
+    try {
+      var blob = new Blob([JSON.stringify({ data: gcChecks })], { type: 'text/plain;charset=utf-8' });
+      navigator.sendBeacon(SYNC_URL, blob);
+    } catch (e) { /* 무시 */ }
+  }
+
+  window.addEventListener('beforeunload', flushPendingPush);
+  window.addEventListener('pagehide', flushPendingPush);
+  document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'hidden') flushPendingPush();
+  });
 
   // 날짜 기반 요일 문자열 자동 계산
   function getDayOfWeek(dateStr) {
